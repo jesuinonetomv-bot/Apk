@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#000000">
+  <title>Jesuíno & Vanessa</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:Arial,sans-serif}
+    #video{position:fixed;inset:0;width:100vw;height:100vh;object-fit:cover}
+    #overlay{position:fixed;inset:0;pointer-events:none;z-index:5}
+    .names{position:absolute;left:0;right:0;bottom:120px;text-align:center;color:white;text-shadow:0 2px 10px rgba(0,0,0,.75);font-family:Georgia,serif}
+    .names .main{font-size:clamp(34px,9vw,64px);font-style:italic;font-weight:600}
+    .names .sub{font-size:14px;letter-spacing:4px;margin-top:5px;text-transform:uppercase}
+    .corner{position:absolute;width:70px;height:70px;border-color:#fff;border-style:solid;opacity:.85}
+    .tl{top:22px;left:22px;border-width:2px 0 0 2px;border-radius:18px 0 0 0}
+    .tr{top:22px;right:22px;border-width:2px 2px 0 0;border-radius:0 18px 0 0}
+    .bl{bottom:110px;left:22px;border-width:0 0 2px 2px;border-radius:0 0 0 18px}
+    .br{bottom:110px;right:22px;border-width:0 2px 2px 0;border-radius:0 0 18px 0}
+    #controls{position:fixed;left:0;right:0;bottom:max(24px,env(safe-area-inset-bottom));display:flex;justify-content:center;gap:28px;z-index:20}
+    button{width:68px;height:68px;border-radius:50%;border:0;background:#fff;color:#111;font-size:28px;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+    #stop{display:none;background:#ffeded}
+    #rec{display:none;position:fixed;top:max(18px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:20;background:rgba(0,0,0,.65);color:#fff;padding:8px 14px;border-radius:20px;font-weight:bold}
+    #preview{display:none;position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.92);align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px}
+    #preview img{max-width:92vw;max-height:72vh;border-radius:12px;border:2px solid #fff}
+    #preview .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+    #preview button{width:auto;height:auto;border-radius:8px;padding:12px 18px;font-size:16px}
+  </style>
+</head>
+<body>
+  <video id="video" autoplay muted playsinline></video>
+  <div id="overlay">
+    <div class="corner tl"></div><div class="corner tr"></div>
+    <div class="corner bl"></div><div class="corner br"></div>
+    <div class="names">
+      <div class="main">Jesuíno &amp; Vanessa</div>
+      <div class="sub">Nosso momento</div>
+    </div>
+  </div>
+
+  <div id="rec">🔴 REC 00:00</div>
+
+  <div id="controls">
+    <button id="switch" title="Trocar câmera">🔄</button>
+    <button id="capture" title="Tirar foto">📸</button>
+    <button id="start" title="Gravar vídeo">🎥</button>
+    <button id="stop" title="Parar gravação">⏹</button>
+  </div>
+
+  <canvas id="photoCanvas" hidden></canvas>
+  <canvas id="recordCanvas" hidden></canvas>
+
+  <div id="preview">
+    <img id="photoPreview" alt="Prévia">
+    <div class="row">
+      <button id="savePhoto">Salvar foto</button>
+      <button id="retry">Voltar</button>
+    </div>
+  </div>
+
+<script>
+const video = document.getElementById('video');
+const photoCanvas = document.getElementById('photoCanvas');
+const recordCanvas = document.getElementById('recordCanvas');
+const switchBtn = document.getElementById('switch');
+const captureBtn = document.getElementById('capture');
+const startBtn = document.getElementById('start');
+const stopBtn = document.getElementById('stop');
+const rec = document.getElementById('rec');
+const preview = document.getElementById('preview');
+const photoPreview = document.getElementById('photoPreview');
+const savePhoto = document.getElementById('savePhoto');
+const retry = document.getElementById('retry');
+let front = true, stream = null, recorder = null, chunks = [], recording = false, timer = null, t0 = 0;
+
+function drawOverlay(ctx,w,h){
+  ctx.save();
+  ctx.strokeStyle='rgba(255,255,255,.9)';
+  ctx.lineWidth=Math.max(2,w/500);
+  const p=w*.06, top=h*.05, bottom=h*.18, L=w*.12;
+  ctx.beginPath(); ctx.moveTo(p+L,top);ctx.lineTo(p,top);ctx.lineTo(p,top+L);ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(w-p-L,top);ctx.lineTo(w-p,top);ctx.lineTo(w-p,top+L);ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(p,h-bottom-L);ctx.lineTo(p,h-bottom);ctx.lineTo(p+L,h-bottom);ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(w-p-L,h-bottom);ctx.lineTo(w-p,h-bottom);ctx.lineTo(w-p,h-bottom-L);ctx.stroke();
+  ctx.fillStyle='#fff';
+  ctx.textAlign='center';
+  ctx.shadowColor='rgba(0,0,0,.75)';
+  ctx.shadowBlur=10;
+  ctx.font=`italic 600 ${Math.round(w*.075)}px Georgia, serif`;
+  ctx.fillText('Jesuíno & Vanessa', w/2, h-bottom-30);
+  ctx.shadowBlur=6;
+  ctx.font=`${Math.round(w*.024)}px Arial, sans-serif`;
+  ctx.fillText('NOSSO MOMENTO', w/2, h-bottom+5);
+  ctx.restore();
+}
+
+async function startCamera(){
+  if (stream) stream.getTracks().forEach(t=>t.stop());
+  try{
+    stream = await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:front?'user':'environment',width:{ideal:1920},height:{ideal:1080}},
+      audio:true
+    });
+    video.srcObject=stream;
+    video.style.transform=front?'scaleX(-1)':'none';
+  }catch(err){
+    alert('Não foi possível abrir a câmera/microfone. Verifique as permissões do navegador.');
+  }
+}
+
+switchBtn.onclick=()=>{front=!front;startCamera()};
+
+captureBtn.onclick=()=>{
+  if(!stream) return;
+  const track=stream.getVideoTracks()[0];
+  const s=track.getSettings();
+  const w=s.width||video.videoWidth||1280, h=s.height||video.videoHeight||720;
+  photoCanvas.width=w; photoCanvas.height=h;
+  const c=photoCanvas.getContext('2d');
+  if(front){c.save();c.translate(w,0);c.scale(-1,1);c.drawImage(video,0,0,w,h);c.restore();}
+  else c.drawImage(video,0,0,w,h);
+  drawOverlay(c,w,h);
+  photoPreview.src=photoCanvas.toDataURL('image/png');
+  preview.style.display='flex';
+};
+
+savePhoto.onclick=()=>{
+  const a=document.createElement('a');
+  a.href=photoPreview.src;
+  a.download='jesuino-vanessa.png';
+  a.click();
+};
+retry.onclick=()=>preview.style.display='none';
+
+function startTimer(){
+  t0=Date.now(); rec.style.display='block';
+  timer=setInterval(()=>{
+    const sec=Math.floor((Date.now()-t0)/1000);
+    const m=String(Math.floor(sec/60)).padStart(2,'0');
+    const s=String(sec%60).padStart(2,'0');
+    rec.textContent=`🔴 REC ${m}:${s}`;
+  },250);
+}
+function stopTimer(){clearInterval(timer);timer=null;rec.style.display='none'}
+
+startBtn.onclick=()=>{
+  if(!stream || recording) return;
+  if(typeof MediaRecorder==='undefined' || typeof recordCanvas.captureStream!=='function'){
+    alert('Este navegador não suporta gravação de vídeo por esta página.');
+    return;
+  }
+  const track=stream.getVideoTracks()[0], s=track.getSettings();
+  const cw=s.width||1280, ch=s.height||720;
+  const w=720, h=Math.round(ch*(w/cw));
+  recordCanvas.width=w;recordCanvas.height=h;
+  const ctx=recordCanvas.getContext('2d');
+  recording=true;chunks=[];
+
+  function frame(){
+    if(!recording)return;
+    ctx.clearRect(0,0,w,h);
+    if(front){ctx.save();ctx.translate(w,0);ctx.scale(-1,1);ctx.drawImage(video,0,0,w,h);ctx.restore();}
+    else ctx.drawImage(video,0,0,w,h);
+    drawOverlay(ctx,w,h);
+    requestAnimationFrame(frame);
+  }
+  frame();
+
+  const canvasStream=recordCanvas.captureStream(24);
+  const combined=new MediaStream();
+  canvasStream.getVideoTracks().forEach(t=>combined.addTrack(t));
+  stream.getAudioTracks().forEach(t=>combined.addTrack(t));
+
+  let opts={};
+  if(MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus')) opts.mimeType='video/webm;codecs=vp8,opus';
+  recorder=new MediaRecorder(combined,opts);
+  recorder.ondataavailable=e=>{if(e.data?.size)chunks.push(e.data)};
+  recorder.onstop=()=>{
+    const blob=new Blob(chunks,{type:recorder.mimeType||'video/webm'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download='jesuino-vanessa.webm';a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),3000);
+  };
+  recorder.start();
+  startBtn.style.display='none';stopBtn.style.display='inline-block';startTimer();
+};
+
+stopBtn.onclick=()=>{
+  if(recorder?.state==='recording') recorder.stop();
+  recording=false;stopBtn.style.display='none';startBtn.style.display='inline-block';stopTimer();
+};
+
+startCamera();
+</script>
+</body>
+</html>
