@@ -1,134 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#111111">
-  <title>PAIDEX - Ciclismo de Longa Distância</title>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:Arial,sans-serif}
-    #video{position:fixed;inset:0;width:100vw;height:100vh;object-fit:cover;filter:saturate(.85) contrast(1.05)}
-    #overlay{position:fixed;inset:0;pointer-events:none;z-index:5}
-    .tint{position:absolute;inset:0;background:linear-gradient(180deg,rgba(224,212,0,.20),rgba(74,59,0,.10) 45%,rgba(0,0,0,.34));mix-blend-mode:screen}
-    .topbar{position:absolute;top:max(12px,env(safe-area-inset-top));left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-    .brand{color:#ffe116;text-shadow:0 3px 7px rgba(0,0,0,.75)}
-    .brand .paidex{font-weight:1000;font-style:italic;letter-spacing:-4px;font-size:clamp(48px,15vw,92px);line-height:.8}
-    .brand .sub{font-size:clamp(12px,3.2vw,19px);font-style:italic;font-weight:700;letter-spacing:.5px;margin-left:8px;margin-top:7px}
-    .datetime{background:rgba(45,28,5,.78);border:2px solid #ffe116;color:#ffe116;border-radius:14px;padding:8px 10px;text-align:center;min-width:112px;box-shadow:0 4px 12px rgba(0,0,0,.35)}
-    .datetime .date{font-size:17px;font-weight:900}.datetime .time{font-size:13px;font-weight:800;margin-top:2px}
-    .mango{position:absolute;left:18px;top:25%;color:#fff;text-shadow:0 3px 8px rgba(0,0,0,.8)}
-    .mango .stage{font-family:cursive;font-size:clamp(20px,5vw,32px);font-style:italic}
-    .mango .fruit{font-size:clamp(34px,9vw,58px);line-height:1;margin:2px 0}
-    .mango .title{color:#ffd21d;font-size:clamp(24px,7vw,46px);font-weight:1000;line-height:.9}
-    .mango .place{font-family:cursive;font-size:clamp(22px,6vw,40px);font-style:italic}
-    .distance{position:absolute;left:10px;right:10px;bottom:95px;color:rgba(88,48,26,.62);font-weight:1000;font-size:clamp(92px,34vw,210px);line-height:.65;text-align:center;letter-spacing:-10px;text-shadow:0 2px rgba(255,220,0,.15)}
-    .slogan{position:absolute;left:0;right:0;bottom:82px;text-align:center;color:white;font-size:clamp(20px,5.8vw,38px);font-style:italic;font-weight:900;text-shadow:0 4px 8px #000;padding:0 12px}
-    #controls{position:fixed;left:0;right:0;bottom:max(18px,env(safe-area-inset-bottom));display:flex;justify-content:center;gap:26px;z-index:20}
-    button{width:66px;height:66px;border-radius:50%;border:2px solid #ffe116;background:rgba(40,32,0,.88);color:#ffe116;font-size:27px;box-shadow:0 5px 18px rgba(0,0,0,.45)}
-    #stop{display:none;background:#4a1010;color:#fff;border-color:#ff8a8a}
-    #rec{display:none;position:fixed;top:120px;left:50%;transform:translateX(-50%);z-index:20;background:rgba(0,0,0,.72);color:#fff;padding:8px 14px;border-radius:20px;font-weight:bold}
-    #preview{display:none;position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.94);align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px}
-    #preview img{max-width:92vw;max-height:72vh;border-radius:10px;border:2px solid #ffe116}
-    #preview .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-    #preview button{width:auto;height:auto;border-radius:9px;padding:12px 18px;font-size:16px}
-  </style>
-</head>
-<body>
-  <video id="video" autoplay muted playsinline></video>
-  <div id="overlay">
-    <div class="tint"></div>
-    <div class="topbar">
-      <div class="brand"><div class="paidex">PAIDEX</div><div class="sub">CICLISMO DE LONGA DISTÂNCIA</div></div>
-      <div class="datetime"><div class="date" id="dateText">--/--/----</div><div class="time" id="timeText">--:--:--</div></div>
-    </div>
-    <div class="mango">
-      <div class="stage">etapa</div>
-      <div class="fruit">🥭🥭🥭</div>
-      <div class="title">MANGA</div>
-      <div class="place">Peixe-Boi</div>
-    </div>
-    <div class="distance">150KM</div>
-    <div class="slogan">DESISTIR NÃO É UMA OPÇÃO!</div>
-  </div>
-
-  <div id="rec">🔴 REC 00:00</div>
-  <div id="controls">
-    <button id="switch" title="Trocar câmera">🔄</button>
-    <button id="capture" title="Tirar foto">📸</button>
-    <button id="start" title="Gravar vídeo">🎥</button>
-    <button id="stop" title="Parar gravação">⏹</button>
-  </div>
-
-  <canvas id="photoCanvas" hidden></canvas>
-  <canvas id="recordCanvas" hidden></canvas>
-  <div id="preview"><img id="photoPreview" alt="Prévia"><div class="row"><button id="savePhoto">Salvar foto</button><button id="retry">Voltar</button></div></div>
-
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"><meta name="theme-color" content="#111111">
+<title>PAIDEX - Ciclismo de Longa Distância</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:Arial,sans-serif}#video{position:fixed;inset:0;width:100vw;height:100vh;object-fit:cover;filter:saturate(.85) contrast(1.05)}#overlay{position:fixed;inset:0;pointer-events:none;z-index:5}.tint{position:absolute;inset:0;background:linear-gradient(180deg,rgba(224,212,0,.20),rgba(74,59,0,.10) 45%,rgba(0,0,0,.34));mix-blend-mode:screen}.topbar{position:absolute;top:max(12px,env(safe-area-inset-top));left:16px;right:72px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.brand{color:#ffe116;text-shadow:0 3px 7px rgba(0,0,0,.75)}.brand .paidex{font-weight:1000;font-style:italic;letter-spacing:-4px;font-size:clamp(46px,14vw,88px);line-height:.8}.brand .sub{font-size:clamp(11px,3vw,18px);font-style:italic;font-weight:700;margin-left:8px;margin-top:7px}.datetime{background:rgba(45,28,5,.78);border:2px solid #ffe116;color:#ffe116;border-radius:12px;padding:7px 8px;text-align:center;min-width:105px}.datetime .date{font-size:15px;font-weight:900}.datetime .time{font-size:12px;font-weight:800;margin-top:2px}.mango{position:absolute;left:18px;top:25%;color:#fff;text-shadow:0 3px 8px rgba(0,0,0,.8)}.mango .stage{font-family:cursive;font-size:clamp(20px,5vw,32px);font-style:italic}.mango .fruit{font-size:clamp(34px,9vw,58px);line-height:1}.mango .title{color:#ffd21d;font-size:clamp(24px,7vw,46px);font-weight:1000;line-height:.9}.mango .place{font-family:cursive;font-size:clamp(22px,6vw,40px);font-style:italic}.sponsors{position:absolute;top:11%;right:5px;width:66px;bottom:118px;background:rgba(78,46,26,.70);border-left:1px solid rgba(255,225,22,.6);display:flex;flex-direction:column;justify-content:space-evenly;align-items:center;padding:5px 3px}.sponsor{color:white;text-align:center;font-weight:900;font-size:7.5px;line-height:1.05;text-shadow:0 2px 3px #000;max-width:60px}.sponsor strong{display:block;color:#ffe116;font-size:9px}.support{position:absolute;left:8px;right:78px;bottom:59px;height:31px;background:rgba(45,28,5,.66);border-top:1px solid rgba(255,225,22,.55);display:flex;align-items:center;justify-content:space-around;color:#fff;font-size:7px;font-weight:900;text-align:center}.distance{position:absolute;left:10px;right:70px;bottom:94px;color:rgba(88,48,26,.58);font-weight:1000;font-size:clamp(80px,30vw,190px);line-height:.65;text-align:center;letter-spacing:-8px}.slogan{position:absolute;left:0;right:70px;bottom:91px;text-align:center;color:white;font-size:clamp(17px,5vw,34px);font-style:italic;font-weight:900;text-shadow:0 4px 8px #000;padding:0 8px}#controls{position:fixed;left:0;right:0;bottom:max(10px,env(safe-area-inset-bottom));display:flex;justify-content:center;gap:24px;z-index:20}button{width:58px;height:58px;border-radius:50%;border:2px solid #ffe116;background:rgba(40,32,0,.88);color:#ffe116;font-size:24px;box-shadow:0 5px 18px rgba(0,0,0,.45)}#stop{display:none;background:#4a1010;color:#fff;border-color:#ff8a8a}#rec{display:none;position:fixed;top:120px;left:50%;transform:translateX(-50%);z-index:20;background:rgba(0,0,0,.72);color:#fff;padding:8px 14px;border-radius:20px;font-weight:bold}#preview{display:none;position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.94);align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px}#preview img{max-width:92vw;max-height:72vh;border-radius:10px;border:2px solid #ffe116}#preview .row{display:flex;gap:10px}#preview button{width:auto;height:auto;border-radius:9px;padding:12px 18px;font-size:16px}
+</style>
+</head><body>
+<video id="video" autoplay muted playsinline></video>
+<div id="overlay"><div class="tint"></div><div class="topbar"><div class="brand"><div class="paidex">PAIDEX</div><div class="sub">CICLISMO DE LONGA DISTÂNCIA</div></div><div class="datetime"><div class="date" id="dateText">--/--/----</div><div class="time" id="timeText">--:--:--</div></div></div><div class="mango"><div class="stage">etapa</div><div class="fruit">🥭🥭🥭</div><div class="title">MANGA</div><div class="place">Peixe-Boi</div></div>
+<div class="sponsors"><div class="sponsor"><strong>AMAZÔNIA</strong>BIKES</div><div class="sponsor"><strong>AIL</strong>ESTRUTURAL</div><div class="sponsor"><strong>R</strong>CONFIABILIDADE</div><div class="sponsor"><strong>B&B</strong>FESTAS</div><div class="sponsor"><strong>BIKE</strong>CENTER</div><div class="sponsor"><strong>BIKERUN</strong></div><div class="sponsor"><strong>BIKE</strong>ESTILO</div><div class="sponsor"><strong>KDL</strong>SERVIÇOS</div><div class="sponsor"><strong>THUMA</strong></div><div class="sponsor"><strong>ÓTICA</strong>KAMIJÓ</div><div class="sponsor"><strong>LA SCOPO</strong>.CC</div><div class="sponsor"><strong>LU MODA</strong>BIKE</div><div class="sponsor"><strong>MARCENA</strong>BIKE</div><div class="sponsor"><strong>OGGI</strong></div><div class="sponsor"><strong>ORANGE</strong>TRAVEL</div><div class="sponsor"><strong>REVEMAR</strong></div><div class="sponsor"><strong>SANTIAGO</strong></div></div>
+<div class="distance">150KM</div><div class="slogan">DESISTIR NÃO É UMA OPÇÃO!</div><div class="support"><span>PREFEITURA<br>PEIXE-BOI</span><span>ESPORTE E LAZER<br>BELÉM</span><span>FPC.PA</span></div></div>
+<div id="rec">🔴 REC 00:00</div><div id="controls"><button id="switch">🔄</button><button id="capture">📸</button><button id="start">🎥</button><button id="stop">⏹</button></div><canvas id="photoCanvas" hidden></canvas><canvas id="recordCanvas" hidden></canvas><div id="preview"><img id="photoPreview"><div class="row"><button id="savePhoto">Salvar foto</button><button id="retry">Voltar</button></div></div>
 <script>
-const video=document.getElementById('video'),photoCanvas=document.getElementById('photoCanvas'),recordCanvas=document.getElementById('recordCanvas');
-const switchBtn=document.getElementById('switch'),captureBtn=document.getElementById('capture'),startBtn=document.getElementById('start'),stopBtn=document.getElementById('stop');
-const rec=document.getElementById('rec'),preview=document.getElementById('preview'),photoPreview=document.getElementById('photoPreview'),savePhoto=document.getElementById('savePhoto'),retry=document.getElementById('retry');
-const dateText=document.getElementById('dateText'),timeText=document.getElementById('timeText');
-let front=true,stream=null,recorder=null,chunks=[],recording=false,timer=null,t0=0;
-
-function nowParts(){
-  const d=new Date();
-  return {date:d.toLocaleDateString('pt-BR'),time:d.toLocaleTimeString('pt-BR',{hour12:false})};
-}
-function updateClock(){const n=nowParts();dateText.textContent=n.date;timeText.textContent=n.time}
-updateClock();setInterval(updateClock,1000);
-
-function drawOverlay(ctx,w,h){
-  const n=nowParts();
-  ctx.save();
-  ctx.fillStyle='rgba(220,205,0,.12)';ctx.fillRect(0,0,w,h);
-  ctx.shadowColor='rgba(0,0,0,.8)';ctx.shadowBlur=12;
-  ctx.fillStyle='#ffe116';ctx.font=`italic 1000 ${Math.round(w*.15)}px Arial`;ctx.textAlign='left';ctx.fillText('PAIDEX',w*.035,h*.105);
-  ctx.font=`italic 700 ${Math.round(w*.034)}px Arial`;ctx.fillStyle='#fff';ctx.fillText('CICLISMO DE LONGA DISTÂNCIA',w*.05,h*.142);
-
-  const bw=w*.27,bh=h*.075,bx=w-bw-w*.035,by=h*.035;
-  ctx.shadowBlur=0;ctx.fillStyle='rgba(45,28,5,.80)';ctx.strokeStyle='#ffe116';ctx.lineWidth=Math.max(2,w*.004);ctx.beginPath();ctx.roundRect(bx,by,bw,bh,16);ctx.fill();ctx.stroke();
-  ctx.fillStyle='#ffe116';ctx.textAlign='center';ctx.font=`900 ${Math.round(w*.034)}px Arial`;ctx.fillText(n.date,bx+bw/2,by+bh*.43);ctx.font=`800 ${Math.round(w*.027)}px Arial`;ctx.fillText(n.time,bx+bw/2,by+bh*.74);
-
-  ctx.textAlign='left';ctx.shadowColor='rgba(0,0,0,.8)';ctx.shadowBlur=10;ctx.fillStyle='#fff';ctx.font=`italic ${Math.round(w*.045)}px cursive`;ctx.fillText('etapa',w*.045,h*.30);
-  ctx.font=`${Math.round(w*.075)}px Arial`;ctx.fillText('🥭🥭🥭',w*.045,h*.36);
-  ctx.fillStyle='#ffd21d';ctx.font=`1000 ${Math.round(w*.075)}px Arial`;ctx.fillText('MANGA',w*.045,h*.415);
-  ctx.fillStyle='#fff';ctx.font=`italic ${Math.round(w*.052)}px cursive`;ctx.fillText('Peixe-Boi',w*.045,h*.46);
-
-  ctx.textAlign='center';ctx.shadowBlur=0;ctx.fillStyle='rgba(90,50,25,.58)';ctx.font=`1000 ${Math.round(w*.28)}px Arial`;ctx.fillText('150KM',w/2,h*.88);
-  ctx.shadowColor='#000';ctx.shadowBlur=10;ctx.fillStyle='#fff';ctx.font=`italic 900 ${Math.round(w*.045)}px Arial`;ctx.fillText('DESISTIR NÃO É UMA OPÇÃO!',w/2,h*.93);
-  ctx.restore();
-}
-
-async function startCamera(){
-  if(stream)stream.getTracks().forEach(t=>t.stop());
-  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:front?'user':'environment',width:{ideal:1920},height:{ideal:1080}},audio:true});video.srcObject=stream;video.style.transform=front?'scaleX(-1)':'none';}
-  catch(err){alert('Não foi possível abrir a câmera/microfone. Verifique as permissões do navegador.');}
-}
-switchBtn.onclick=()=>{front=!front;startCamera()};
-
-captureBtn.onclick=()=>{
-  if(!stream)return;const track=stream.getVideoTracks()[0],s=track.getSettings(),w=s.width||video.videoWidth||1280,h=s.height||video.videoHeight||720;
-  photoCanvas.width=w;photoCanvas.height=h;const c=photoCanvas.getContext('2d');
-  if(front){c.save();c.translate(w,0);c.scale(-1,1);c.drawImage(video,0,0,w,h);c.restore();}else c.drawImage(video,0,0,w,h);
-  drawOverlay(c,w,h);photoPreview.src=photoCanvas.toDataURL('image/png');preview.style.display='flex';
-};
-savePhoto.onclick=()=>{const a=document.createElement('a');a.href=photoPreview.src;const n=nowParts();a.download=`paidex-${n.date.replaceAll('/','-')}-${n.time.replaceAll(':','-')}.png`;a.click();};
-retry.onclick=()=>preview.style.display='none';
-
-function startTimer(){t0=Date.now();rec.style.display='block';timer=setInterval(()=>{const sec=Math.floor((Date.now()-t0)/1000);rec.textContent=`🔴 REC ${String(Math.floor(sec/60)).padStart(2,'0')}:${String(sec%60).padStart(2,'0')}`},250)}
-function stopTimer(){clearInterval(timer);timer=null;rec.style.display='none'}
-
-startBtn.onclick=()=>{
-  if(!stream||recording)return;if(typeof MediaRecorder==='undefined'||typeof recordCanvas.captureStream!=='function'){alert('Este navegador não suporta gravação de vídeo por esta página.');return;}
-  const track=stream.getVideoTracks()[0],s=track.getSettings(),cw=s.width||1280,ch=s.height||720,w=720,h=Math.round(ch*(w/cw));recordCanvas.width=w;recordCanvas.height=h;const ctx=recordCanvas.getContext('2d');recording=true;chunks=[];
-  function frame(){if(!recording)return;ctx.clearRect(0,0,w,h);if(front){ctx.save();ctx.translate(w,0);ctx.scale(-1,1);ctx.drawImage(video,0,0,w,h);ctx.restore();}else ctx.drawImage(video,0,0,w,h);drawOverlay(ctx,w,h);requestAnimationFrame(frame)}frame();
-  const cs=recordCanvas.captureStream(24),combined=new MediaStream();cs.getVideoTracks().forEach(t=>combined.addTrack(t));stream.getAudioTracks().forEach(t=>combined.addTrack(t));let opts={};if(MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus'))opts.mimeType='video/webm;codecs=vp8,opus';recorder=new MediaRecorder(combined,opts);
-  recorder.ondataavailable=e=>{if(e.data?.size)chunks.push(e.data)};recorder.onstop=()=>{const blob=new Blob(chunks,{type:recorder.mimeType||'video/webm'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;const n=nowParts();a.download=`paidex-${n.date.replaceAll('/','-')}-${n.time.replaceAll(':','-')}.webm`;a.click();setTimeout(()=>URL.revokeObjectURL(url),3000)};
-  recorder.start();startBtn.style.display='none';stopBtn.style.display='inline-block';startTimer();
-};
-stopBtn.onclick=()=>{if(recorder?.state==='recording')recorder.stop();recording=false;stopBtn.style.display='none';startBtn.style.display='inline-block';stopTimer();};
-startCamera();
-</script>
-</body>
-</html>
+const video=document.getElementById('video'),photoCanvas=document.getElementById('photoCanvas'),recordCanvas=document.getElementById('recordCanvas'),switchBtn=document.getElementById('switch'),captureBtn=document.getElementById('capture'),startBtn=document.getElementById('start'),stopBtn=document.getElementById('stop'),rec=document.getElementById('rec'),preview=document.getElementById('preview'),photoPreview=document.getElementById('photoPreview'),savePhoto=document.getElementById('savePhoto'),retry=document.getElementById('retry'),dateText=document.getElementById('dateText'),timeText=document.getElementById('timeText');let front=true,stream=null,recorder=null,chunks=[],recording=false,timer=null,t0=0;
+const sponsorNames=['AMAZÔNIA BIKES','AIL ESTRUTURAL','R CONFIABILIDADE','B&B FESTAS','BIKE CENTER','BIKERUN','BIKE ESTILO','KDL SERVIÇOS','THUMA','ÓTICA KAMIJÓ','LA SCOPO.CC','LU MODA BIKE','MARCENA BIKE','OGGI','ORANGE TRAVEL','REVEMAR','SANTIAGO'];
+function nowParts(){const d=new Date();return{date:d.toLocaleDateString('pt-BR'),time:d.toLocaleTimeString('pt-BR',{hour12:false})}}function updateClock(){const n=nowParts();dateText.textContent=n.date;timeText.textContent=n.time}updateClock();setInterval(updateClock,1000);
+function drawOverlay(ctx,w,h){const n=nowParts();ctx.save();ctx.fillStyle='rgba(220,205,0,.12)';ctx.fillRect(0,0,w,h);ctx.shadowColor='rgba(0,0,0,.8)';ctx.shadowBlur=12;ctx.fillStyle='#ffe116';ctx.font=`italic 1000 ${Math.round(w*.135)}px Arial`;ctx.textAlign='left';ctx.fillText('PAIDEX',w*.03,h*.095);ctx.font=`italic 700 ${Math.round(w*.03)}px Arial`;ctx.fillStyle='#fff';ctx.fillText('CICLISMO DE LONGA DISTÂNCIA',w*.045,h*.13);const bw=w*.24,bh=h*.065,bx=w-bw-w*.095,by=h*.028;ctx.shadowBlur=0;ctx.fillStyle='rgba(45,28,5,.82)';ctx.strokeStyle='#ffe116';ctx.lineWidth=Math.max(2,w*.004);ctx.beginPath();ctx.roundRect(bx,by,bw,bh,14);ctx.fill();ctx.stroke();ctx.fillStyle='#ffe116';ctx.textAlign='center';ctx.font=`900 ${Math.round(w*.03)}px Arial`;ctx.fillText(n.date,bx+bw/2,by+bh*.43);ctx.font=`800 ${Math.round(w*.024)}px Arial`;ctx.fillText(n.time,bx+bw/2,by+bh*.75);ctx.textAlign='left';ctx.shadowColor='#000';ctx.shadowBlur=9;ctx.fillStyle='#fff';ctx.font=`italic ${Math.round(w*.04)}px cursive`;ctx.fillText('etapa',w*.04,h*.29);ctx.font=`${Math.round(w*.065)}px Arial`;ctx.fillText('🥭🥭🥭',w*.04,h*.35);ctx.fillStyle='#ffd21d';ctx.font=`1000 ${Math.round(w*.065)}px Arial`;ctx.fillText('MANGA',w*.04,h*.405);ctx.fillStyle='#fff';ctx.font=`italic ${Math.round(w*.047)}px cursive`;ctx.fillText('Peixe-Boi',w*.04,h*.45);
+const sx=w*.91,sw=w*.09;ctx.shadowBlur=0;ctx.fillStyle='rgba(78,46,26,.72)';ctx.fillRect(sx,h*.105,sw,h*.73);ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font=`900 ${Math.max(8,Math.round(w*.011))}px Arial`;let yy=h*.135,step=h*.039;sponsorNames.forEach((s,i)=>{if(i%2===0)ctx.fillStyle='#ffe116';else ctx.fillStyle='#fff';ctx.fillText(s,sx+sw/2,yy);yy+=step});ctx.fillStyle='rgba(90,50,25,.58)';ctx.font=`1000 ${Math.round(w*.25)}px Arial`;ctx.fillText('150KM',w*.46,h*.86);ctx.shadowColor='#000';ctx.shadowBlur=10;ctx.fillStyle='#fff';ctx.font=`italic 900 ${Math.round(w*.04)}px Arial`;ctx.fillText('DESISTIR NÃO É UMA OPÇÃO!',w*.46,h*.91);ctx.shadowBlur=0;ctx.fillStyle='rgba(45,28,5,.72)';ctx.fillRect(0,h*.935,w*.91,h*.045);ctx.fillStyle='#fff';ctx.font=`900 ${Math.round(w*.016)}px Arial`;ctx.fillText('PREFEITURA PEIXE-BOI     •     ESPORTE E LAZER BELÉM     •     FPC.PA',w*.455,h*.963);ctx.restore()}
+async function startCamera(){if(stream)stream.getTracks().forEach(t=>t.stop());try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:front?'user':'environment',width:{ideal:1920},height:{ideal:1080}},audio:true});video.srcObject=stream;video.style.transform=front?'scaleX(-1)':'none'}catch(e){alert('Não foi possível abrir a câmera/microfone. Verifique as permissões do navegador.')}}switchBtn.onclick=()=>{front=!front;startCamera()};captureBtn.onclick=()=>{if(!stream)return;const s=stream.getVideoTracks()[0].getSettings(),w=s.width||video.videoWidth||1280,h=s.height||video.videoHeight||720;photoCanvas.width=w;photoCanvas.height=h;const c=photoCanvas.getContext('2d');if(front){c.save();c.translate(w,0);c.scale(-1,1);c.drawImage(video,0,0,w,h);c.restore()}else c.drawImage(video,0,0,w,h);drawOverlay(c,w,h);photoPreview.src=photoCanvas.toDataURL('image/png');preview.style.display='flex'};savePhoto.onclick=()=>{const a=document.createElement('a'),n=nowParts();a.href=photoPreview.src;a.download=`paidex-${n.date.replaceAll('/','-')}-${n.time.replaceAll(':','-')}.png`;a.click()};retry.onclick=()=>preview.style.display='none';function startTimer(){t0=Date.now();rec.style.display='block';timer=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);rec.textContent=`🔴 REC ${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`},250)}function stopTimer(){clearInterval(timer);rec.style.display='none'}startBtn.onclick=()=>{if(!stream||recording)return;if(typeof MediaRecorder==='undefined'||typeof recordCanvas.captureStream!=='function'){alert('Este navegador não suporta gravação de vídeo por esta página.');return}const s=stream.getVideoTracks()[0].getSettings(),cw=s.width||1280,ch=s.height||720,w=720,h=Math.round(ch*(w/cw));recordCanvas.width=w;recordCanvas.height=h;const ctx=recordCanvas.getContext('2d');recording=true;chunks=[];function frame(){if(!recording)return;ctx.clearRect(0,0,w,h);if(front){ctx.save();ctx.translate(w,0);ctx.scale(-1,1);ctx.drawImage(video,0,0,w,h);ctx.restore()}else ctx.drawImage(video,0,0,w,h);drawOverlay(ctx,w,h);requestAnimationFrame(frame)}frame();const cs=recordCanvas.captureStream(24),combined=new MediaStream();cs.getVideoTracks().forEach(t=>combined.addTrack(t));stream.getAudioTracks().forEach(t=>combined.addTrack(t));let opts={};if(MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus'))opts.mimeType='video/webm;codecs=vp8,opus';recorder=new MediaRecorder(combined,opts);recorder.ondataavailable=e=>{if(e.data?.size)chunks.push(e.data)};recorder.onstop=()=>{const b=new Blob(chunks,{type:recorder.mimeType||'video/webm'}),u=URL.createObjectURL(b),a=document.createElement('a'),n=nowParts();a.href=u;a.download=`paidex-${n.date.replaceAll('/','-')}-${n.time.replaceAll(':','-')}.webm`;a.click();setTimeout(()=>URL.revokeObjectURL(u),3000)};recorder.start();startBtn.style.display='none';stopBtn.style.display='inline-block';startTimer()};stopBtn.onclick=()=>{if(recorder?.state==='recording')recorder.stop();recording=false;stopBtn.style.display='none';startBtn.style.display='inline-block';stopTimer()};startCamera();
+</script></body></html>
