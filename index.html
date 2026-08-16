@@ -3,58 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#000000">
-  <title>Jesuíno Neto</title>
+  <meta name="theme-color" content="#111111">
+  <title>PAIDEX - Ciclismo de Longa Distância</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:Arial,sans-serif}
-    #video{position:fixed;inset:0;width:100vw;height:100vh;object-fit:cover}
+    #video{position:fixed;inset:0;width:100vw;height:100vh;object-fit:cover;filter:saturate(.85) contrast(1.05)}
     #overlay{position:fixed;inset:0;pointer-events:none;z-index:5}
-
-    .soft-vignette{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.12),transparent 22%,transparent 62%,rgba(0,0,0,.22));}
-
-    .flower-cluster{position:absolute;font-size:clamp(24px,7vw,46px);filter:drop-shadow(0 3px 5px rgba(0,0,0,.4));line-height:1.05;}
-    .flowers-tl{top:18px;left:14px;transform:rotate(-10deg)}
-    .flowers-tr{top:18px;right:14px;transform:rotate(10deg)}
-    .flowers-bl{bottom:112px;left:10px;transform:rotate(8deg)}
-    .flowers-br{bottom:112px;right:10px;transform:rotate(-8deg)}
-
-    .sparkle{position:absolute;font-size:clamp(14px,4vw,24px);text-shadow:0 2px 6px rgba(0,0,0,.5)}
-    .s1{top:18%;left:7%}.s2{top:14%;right:9%}.s3{top:48%;left:4%}.s4{top:42%;right:5%}
-
-    .names{position:absolute;left:0;right:0;bottom:124px;text-align:center;padding:0 12px;text-shadow:0 3px 12px rgba(0,0,0,.9)}
-    .names .main{font-family:"Brush Script MT","Segoe Script","URW Chancery L",cursive;font-size:clamp(46px,14vw,92px);font-weight:700;line-height:.92;background:linear-gradient(90deg,#ff6fa8,#ffd166,#8be28b,#67d5ff,#b79cff,#ff8fab);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 2px rgba(0,0,0,.75)) drop-shadow(0 0 10px rgba(255,255,255,.18));}
-    .names .sub{display:inline-block;margin-top:10px;padding:6px 13px;border-radius:999px;background:rgba(0,0,0,.34);color:#fff;font-size:13px;font-weight:700;letter-spacing:4px;text-transform:uppercase;border:1px solid rgba(255,255,255,.35)}
-
-    #controls{position:fixed;left:0;right:0;bottom:max(24px,env(safe-area-inset-bottom));display:flex;justify-content:center;gap:28px;z-index:20}
-    button{width:68px;height:68px;border-radius:50%;border:2px solid rgba(255,255,255,.7);background:rgba(255,255,255,.94);color:#111;font-size:28px;box-shadow:0 5px 18px rgba(0,0,0,.42)}
-    #stop{display:none;background:#ffe8ef}
-    #rec{display:none;position:fixed;top:max(18px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:20;background:rgba(0,0,0,.68);color:#fff;padding:8px 14px;border-radius:20px;font-weight:bold}
-    #preview{display:none;position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.92);align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px}
-    #preview img{max-width:92vw;max-height:72vh;border-radius:12px;border:2px solid #fff}
+    .tint{position:absolute;inset:0;background:linear-gradient(180deg,rgba(224,212,0,.20),rgba(74,59,0,.10) 45%,rgba(0,0,0,.34));mix-blend-mode:screen}
+    .topbar{position:absolute;top:max(12px,env(safe-area-inset-top));left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+    .brand{color:#ffe116;text-shadow:0 3px 7px rgba(0,0,0,.75)}
+    .brand .paidex{font-weight:1000;font-style:italic;letter-spacing:-4px;font-size:clamp(48px,15vw,92px);line-height:.8}
+    .brand .sub{font-size:clamp(12px,3.2vw,19px);font-style:italic;font-weight:700;letter-spacing:.5px;margin-left:8px;margin-top:7px}
+    .datetime{background:rgba(45,28,5,.78);border:2px solid #ffe116;color:#ffe116;border-radius:14px;padding:8px 10px;text-align:center;min-width:112px;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+    .datetime .date{font-size:17px;font-weight:900}.datetime .time{font-size:13px;font-weight:800;margin-top:2px}
+    .mango{position:absolute;left:18px;top:25%;color:#fff;text-shadow:0 3px 8px rgba(0,0,0,.8)}
+    .mango .stage{font-family:cursive;font-size:clamp(20px,5vw,32px);font-style:italic}
+    .mango .fruit{font-size:clamp(34px,9vw,58px);line-height:1;margin:2px 0}
+    .mango .title{color:#ffd21d;font-size:clamp(24px,7vw,46px);font-weight:1000;line-height:.9}
+    .mango .place{font-family:cursive;font-size:clamp(22px,6vw,40px);font-style:italic}
+    .distance{position:absolute;left:10px;right:10px;bottom:95px;color:rgba(88,48,26,.62);font-weight:1000;font-size:clamp(92px,34vw,210px);line-height:.65;text-align:center;letter-spacing:-10px;text-shadow:0 2px rgba(255,220,0,.15)}
+    .slogan{position:absolute;left:0;right:0;bottom:82px;text-align:center;color:white;font-size:clamp(20px,5.8vw,38px);font-style:italic;font-weight:900;text-shadow:0 4px 8px #000;padding:0 12px}
+    #controls{position:fixed;left:0;right:0;bottom:max(18px,env(safe-area-inset-bottom));display:flex;justify-content:center;gap:26px;z-index:20}
+    button{width:66px;height:66px;border-radius:50%;border:2px solid #ffe116;background:rgba(40,32,0,.88);color:#ffe116;font-size:27px;box-shadow:0 5px 18px rgba(0,0,0,.45)}
+    #stop{display:none;background:#4a1010;color:#fff;border-color:#ff8a8a}
+    #rec{display:none;position:fixed;top:120px;left:50%;transform:translateX(-50%);z-index:20;background:rgba(0,0,0,.72);color:#fff;padding:8px 14px;border-radius:20px;font-weight:bold}
+    #preview{display:none;position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.94);align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px}
+    #preview img{max-width:92vw;max-height:72vh;border-radius:10px;border:2px solid #ffe116}
     #preview .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-    #preview button{width:auto;height:auto;border-radius:10px;padding:12px 18px;font-size:16px}
+    #preview button{width:auto;height:auto;border-radius:9px;padding:12px 18px;font-size:16px}
   </style>
 </head>
 <body>
   <video id="video" autoplay muted playsinline></video>
-
   <div id="overlay">
-    <div class="soft-vignette"></div>
-    <div class="flower-cluster flowers-tl">🌸🌼🌿</div>
-    <div class="flower-cluster flowers-tr">🌺🌷🌿</div>
-    <div class="flower-cluster flowers-bl">🌻🌸🍃</div>
-    <div class="flower-cluster flowers-br">🌷🌼🍃</div>
-    <div class="sparkle s1">✨</div><div class="sparkle s2">✨</div>
-    <div class="sparkle s3">💫</div><div class="sparkle s4">✨</div>
-    <div class="names">
-      <div class="main">Jesuíno &amp; Vanessa </div>
-      <div class="sub">Nosso momento </div>
+    <div class="tint"></div>
+    <div class="topbar">
+      <div class="brand"><div class="paidex">PAIDEX</div><div class="sub">CICLISMO DE LONGA DISTÂNCIA</div></div>
+      <div class="datetime"><div class="date" id="dateText">--/--/----</div><div class="time" id="timeText">--:--:--</div></div>
     </div>
+    <div class="mango">
+      <div class="stage">etapa</div>
+      <div class="fruit">🥭🥭🥭</div>
+      <div class="title">MANGA</div>
+      <div class="place">Peixe-Boi</div>
+    </div>
+    <div class="distance">150KM</div>
+    <div class="slogan">DESISTIR NÃO É UMA OPÇÃO!</div>
   </div>
 
   <div id="rec">🔴 REC 00:00</div>
-
   <div id="controls">
     <button id="switch" title="Trocar câmera">🔄</button>
     <button id="capture" title="Tirar foto">📸</button>
@@ -64,103 +62,72 @@
 
   <canvas id="photoCanvas" hidden></canvas>
   <canvas id="recordCanvas" hidden></canvas>
-
-  <div id="preview">
-    <img id="photoPreview" alt="Prévia">
-    <div class="row">
-      <button id="savePhoto">Salvar foto</button>
-      <button id="retry">Voltar</button>
-    </div>
-  </div>
+  <div id="preview"><img id="photoPreview" alt="Prévia"><div class="row"><button id="savePhoto">Salvar foto</button><button id="retry">Voltar</button></div></div>
 
 <script>
-const video = document.getElementById('video');
-const photoCanvas = document.getElementById('photoCanvas');
-const recordCanvas = document.getElementById('recordCanvas');
-const switchBtn = document.getElementById('switch');
-const captureBtn = document.getElementById('capture');
-const startBtn = document.getElementById('start');
-const stopBtn = document.getElementById('stop');
-const rec = document.getElementById('rec');
-const preview = document.getElementById('preview');
-const photoPreview = document.getElementById('photoPreview');
-const savePhoto = document.getElementById('savePhoto');
-const retry = document.getElementById('retry');
-let front = true, stream = null, recorder = null, chunks = [], recording = false, timer = null, t0 = 0;
+const video=document.getElementById('video'),photoCanvas=document.getElementById('photoCanvas'),recordCanvas=document.getElementById('recordCanvas');
+const switchBtn=document.getElementById('switch'),captureBtn=document.getElementById('capture'),startBtn=document.getElementById('start'),stopBtn=document.getElementById('stop');
+const rec=document.getElementById('rec'),preview=document.getElementById('preview'),photoPreview=document.getElementById('photoPreview'),savePhoto=document.getElementById('savePhoto'),retry=document.getElementById('retry');
+const dateText=document.getElementById('dateText'),timeText=document.getElementById('timeText');
+let front=true,stream=null,recorder=null,chunks=[],recording=false,timer=null,t0=0;
 
-function flowerText(ctx,text,x,y,size,align='left'){
-  ctx.save();ctx.font=`${size}px Arial`;ctx.textAlign=align;ctx.shadowColor='rgba(0,0,0,.45)';ctx.shadowBlur=Math.max(4,size*.12);ctx.fillText(text,x,y);ctx.restore();
+function nowParts(){
+  const d=new Date();
+  return {date:d.toLocaleDateString('pt-BR'),time:d.toLocaleTimeString('pt-BR',{hour12:false})};
 }
+function updateClock(){const n=nowParts();dateText.textContent=n.date;timeText.textContent=n.time}
+updateClock();setInterval(updateClock,1000);
 
 function drawOverlay(ctx,w,h){
+  const n=nowParts();
   ctx.save();
-  const grad=ctx.createLinearGradient(0,0,w,0);
-  grad.addColorStop(0,'#ff6fa8');grad.addColorStop(.2,'#ffd166');grad.addColorStop(.4,'#8be28b');grad.addColorStop(.6,'#67d5ff');grad.addColorStop(.8,'#b79cff');grad.addColorStop(1,'#ff8fab');
+  ctx.fillStyle='rgba(220,205,0,.12)';ctx.fillRect(0,0,w,h);
+  ctx.shadowColor='rgba(0,0,0,.8)';ctx.shadowBlur=12;
+  ctx.fillStyle='#ffe116';ctx.font=`italic 1000 ${Math.round(w*.15)}px Arial`;ctx.textAlign='left';ctx.fillText('PAIDEX',w*.035,h*.105);
+  ctx.font=`italic 700 ${Math.round(w*.034)}px Arial`;ctx.fillStyle='#fff';ctx.fillText('CICLISMO DE LONGA DISTÂNCIA',w*.05,h*.142);
 
-  const fs=Math.round(Math.min(w,h)*.055);
-  flowerText(ctx,'🌸🌼🌿',w*.035,h*.09,fs,'left');
-  flowerText(ctx,'🌺🌷🌿',w*.965,h*.09,fs,'right');
-  flowerText(ctx,'🌻🌸🍃',w*.035,h*.84,fs,'left');
-  flowerText(ctx,'🌷🌼🍃',w*.965,h*.84,fs,'right');
+  const bw=w*.27,bh=h*.075,bx=w-bw-w*.035,by=h*.035;
+  ctx.shadowBlur=0;ctx.fillStyle='rgba(45,28,5,.80)';ctx.strokeStyle='#ffe116';ctx.lineWidth=Math.max(2,w*.004);ctx.beginPath();ctx.roundRect(bx,by,bw,bh,16);ctx.fill();ctx.stroke();
+  ctx.fillStyle='#ffe116';ctx.textAlign='center';ctx.font=`900 ${Math.round(w*.034)}px Arial`;ctx.fillText(n.date,bx+bw/2,by+bh*.43);ctx.font=`800 ${Math.round(w*.027)}px Arial`;ctx.fillText(n.time,bx+bw/2,by+bh*.74);
 
-  ctx.textAlign='center';
-  ctx.shadowColor='rgba(0,0,0,.85)';ctx.shadowBlur=12;
-  ctx.fillStyle=grad;
-  ctx.font=`700 ${Math.round(w*.105)}px "Brush Script MT", "Segoe Script", cursive`;
-  ctx.fillText('Jesuíno & Vanessa',w/2,h*.79);
+  ctx.textAlign='left';ctx.shadowColor='rgba(0,0,0,.8)';ctx.shadowBlur=10;ctx.fillStyle='#fff';ctx.font=`italic ${Math.round(w*.045)}px cursive`;ctx.fillText('etapa',w*.045,h*.30);
+  ctx.font=`${Math.round(w*.075)}px Arial`;ctx.fillText('🥭🥭🥭',w*.045,h*.36);
+  ctx.fillStyle='#ffd21d';ctx.font=`1000 ${Math.round(w*.075)}px Arial`;ctx.fillText('MANGA',w*.045,h*.415);
+  ctx.fillStyle='#fff';ctx.font=`italic ${Math.round(w*.052)}px cursive`;ctx.fillText('Peixe-Boi',w*.045,h*.46);
 
-  ctx.shadowBlur=6;
-  ctx.fillStyle='rgba(0,0,0,.42)';
-  const pillW=w*.42,pillH=Math.max(30,h*.042),py=h*.805;
-  ctx.beginPath();ctx.roundRect(w/2-pillW/2,py,pillW,pillH,pillH/2);ctx.fill();
-  ctx.fillStyle='#fff';ctx.font=`700 ${Math.round(w*.026)}px Arial`;
-  ctx.fillText('NOSSO MOMENTO',w/2,py+pillH*.67);
+  ctx.textAlign='center';ctx.shadowBlur=0;ctx.fillStyle='rgba(90,50,25,.58)';ctx.font=`1000 ${Math.round(w*.28)}px Arial`;ctx.fillText('150KM',w/2,h*.88);
+  ctx.shadowColor='#000';ctx.shadowBlur=10;ctx.fillStyle='#fff';ctx.font=`italic 900 ${Math.round(w*.045)}px Arial`;ctx.fillText('DESISTIR NÃO É UMA OPÇÃO!',w/2,h*.93);
   ctx.restore();
 }
 
 async function startCamera(){
-  if (stream) stream.getTracks().forEach(t=>t.stop());
-  try{
-    stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:front?'user':'environment',width:{ideal:1920},height:{ideal:1080}},audio:true});
-    video.srcObject=stream;
-    video.style.transform=front?'scaleX(-1)':'none';
-  }catch(err){alert('Não foi possível abrir a câmera/microfone. Verifique as permissões do navegador.');}
+  if(stream)stream.getTracks().forEach(t=>t.stop());
+  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:front?'user':'environment',width:{ideal:1920},height:{ideal:1080}},audio:true});video.srcObject=stream;video.style.transform=front?'scaleX(-1)':'none';}
+  catch(err){alert('Não foi possível abrir a câmera/microfone. Verifique as permissões do navegador.');}
 }
-
 switchBtn.onclick=()=>{front=!front;startCamera()};
 
 captureBtn.onclick=()=>{
-  if(!stream) return;
-  const track=stream.getVideoTracks()[0],s=track.getSettings();
-  const w=s.width||video.videoWidth||1280,h=s.height||video.videoHeight||720;
-  photoCanvas.width=w;photoCanvas.height=h;
-  const c=photoCanvas.getContext('2d');
+  if(!stream)return;const track=stream.getVideoTracks()[0],s=track.getSettings(),w=s.width||video.videoWidth||1280,h=s.height||video.videoHeight||720;
+  photoCanvas.width=w;photoCanvas.height=h;const c=photoCanvas.getContext('2d');
   if(front){c.save();c.translate(w,0);c.scale(-1,1);c.drawImage(video,0,0,w,h);c.restore();}else c.drawImage(video,0,0,w,h);
-  drawOverlay(c,w,h);
-  photoPreview.src=photoCanvas.toDataURL('image/png');preview.style.display='flex';
+  drawOverlay(c,w,h);photoPreview.src=photoCanvas.toDataURL('image/png');preview.style.display='flex';
 };
-
-savePhoto.onclick=()=>{const a=document.createElement('a');a.href=photoPreview.src;a.download='jesuino-vanessa.png';a.click();};
+savePhoto.onclick=()=>{const a=document.createElement('a');a.href=photoPreview.src;const n=nowParts();a.download=`paidex-${n.date.replaceAll('/','-')}-${n.time.replaceAll(':','-')}.png`;a.click();};
 retry.onclick=()=>preview.style.display='none';
 
-function startTimer(){t0=Date.now();rec.style.display='block';timer=setInterval(()=>{const sec=Math.floor((Date.now()-t0)/1000);const m=String(Math.floor(sec/60)).padStart(2,'0');const s=String(sec%60).padStart(2,'0');rec.textContent=`🔴 REC ${m}:${s}`;},250)}
+function startTimer(){t0=Date.now();rec.style.display='block';timer=setInterval(()=>{const sec=Math.floor((Date.now()-t0)/1000);rec.textContent=`🔴 REC ${String(Math.floor(sec/60)).padStart(2,'0')}:${String(sec%60).padStart(2,'0')}`},250)}
 function stopTimer(){clearInterval(timer);timer=null;rec.style.display='none'}
 
 startBtn.onclick=()=>{
-  if(!stream||recording)return;
-  if(typeof MediaRecorder==='undefined'||typeof recordCanvas.captureStream!=='function'){alert('Este navegador não suporta gravação de vídeo por esta página.');return;}
-  const track=stream.getVideoTracks()[0],s=track.getSettings(),cw=s.width||1280,ch=s.height||720,w=720,h=Math.round(ch*(w/cw));
-  recordCanvas.width=w;recordCanvas.height=h;const ctx=recordCanvas.getContext('2d');recording=true;chunks=[];
+  if(!stream||recording)return;if(typeof MediaRecorder==='undefined'||typeof recordCanvas.captureStream!=='function'){alert('Este navegador não suporta gravação de vídeo por esta página.');return;}
+  const track=stream.getVideoTracks()[0],s=track.getSettings(),cw=s.width||1280,ch=s.height||720,w=720,h=Math.round(ch*(w/cw));recordCanvas.width=w;recordCanvas.height=h;const ctx=recordCanvas.getContext('2d');recording=true;chunks=[];
   function frame(){if(!recording)return;ctx.clearRect(0,0,w,h);if(front){ctx.save();ctx.translate(w,0);ctx.scale(-1,1);ctx.drawImage(video,0,0,w,h);ctx.restore();}else ctx.drawImage(video,0,0,w,h);drawOverlay(ctx,w,h);requestAnimationFrame(frame)}frame();
-  const canvasStream=recordCanvas.captureStream(24),combined=new MediaStream();canvasStream.getVideoTracks().forEach(t=>combined.addTrack(t));stream.getAudioTracks().forEach(t=>combined.addTrack(t));
-  let opts={};if(MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus'))opts.mimeType='video/webm;codecs=vp8,opus';recorder=new MediaRecorder(combined,opts);
-  recorder.ondataavailable=e=>{if(e.data?.size)chunks.push(e.data)};
-  recorder.onstop=()=>{const blob=new Blob(chunks,{type:recorder.mimeType||'video/webm'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='jesuino-vanessa.webm';a.click();setTimeout(()=>URL.revokeObjectURL(url),3000)};
+  const cs=recordCanvas.captureStream(24),combined=new MediaStream();cs.getVideoTracks().forEach(t=>combined.addTrack(t));stream.getAudioTracks().forEach(t=>combined.addTrack(t));let opts={};if(MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus'))opts.mimeType='video/webm;codecs=vp8,opus';recorder=new MediaRecorder(combined,opts);
+  recorder.ondataavailable=e=>{if(e.data?.size)chunks.push(e.data)};recorder.onstop=()=>{const blob=new Blob(chunks,{type:recorder.mimeType||'video/webm'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;const n=nowParts();a.download=`paidex-${n.date.replaceAll('/','-')}-${n.time.replaceAll(':','-')}.webm`;a.click();setTimeout(()=>URL.revokeObjectURL(url),3000)};
   recorder.start();startBtn.style.display='none';stopBtn.style.display='inline-block';startTimer();
 };
-
 stopBtn.onclick=()=>{if(recorder?.state==='recording')recorder.stop();recording=false;stopBtn.style.display='none';startBtn.style.display='inline-block';stopTimer();};
-
 startCamera();
 </script>
 </body>
