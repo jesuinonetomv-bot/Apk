@@ -1,145 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#111111">
-  <title>PAIDEX - Ciclismo de Longa Distância</title>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:Arial,sans-serif}
-    #video{position:fixed;inset:0;width:100vw;height:100vh;object-fit:cover;filter:saturate(.85) contrast(1.05)}
-    #overlay{position:fixed;inset:0;pointer-events:none;z-index:5}
-    .tint{position:absolute;inset:0;background:linear-gradient(180deg,rgba(224,212,0,.20),rgba(74,59,0,.10) 45%,rgba(0,0,0,.34));mix-blend-mode:screen}
-    .topbar{position:absolute;top:max(12px,env(safe-area-inset-top));left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-    .brand{color:#ffe116;text-shadow:0 3px 7px rgba(0,0,0,.75)}
-    .brand .paidex{font-weight:1000;font-style:italic;letter-spacing:-4px;font-size:clamp(48px,15vw,92px);line-height:.8}
-    .brand .sub{font-size:clamp(12px,3.2vw,19px);font-style:italic;font-weight:700;letter-spacing:.5px;margin-left:8px;margin-top:7px}
-    .datetime{background:rgba(45,28,5,.78);border:2px solid #ffe116;color:#ffe116;border-radius:14px;padding:8px 10px;text-align:center;min-width:112px;box-shadow:0 4px 12px rgba(0,0,0,.35)}
-    .datetime .date{font-size:17px;font-weight:900}.datetime .time{font-size:13px;font-weight:800;margin-top:2px}
-    .mango{position:absolute;left:18px;top:25%;color:#fff;text-shadow:0 3px 8px rgba(0,0,0,.8)}
-    .mango .stage{font-family:cursive;font-size:clamp(20px,5vw,32px);font-style:italic}
-    .mango .fruit{font-size:clamp(34px,9vw,58px);line-height:1;margin:2px 0}
-    .mango .title{color:#ffd21d;font-size:clamp(24px,7vw,46px);font-weight:1000;line-height:.9}
-    .mango .place{font-family:cursive;font-size:clamp(22px,6vw,40px);font-style:italic}
-    .distance{position:absolute;left:10px;right:10px;bottom:95px;color:rgba(88,48,26,.62);font-weight:1000;font-size:clamp(92px,34vw,210px);line-height:.65;text-align:center;letter-spacing:-10px;text-shadow:0 2px rgba(255,220,0,.15)}
-    .slogan{position:absolute;left:0;right:0;bottom:82px;text-align:center;color:white;font-size:clamp(20px,5.8vw,38px);font-style:italic;font-weight:900;text-shadow:0 4px 8px #000;padding:0 12px}
-    #controls{position:fixed;left:0;right:0;bottom:max(18px,env(safe-area-inset-bottom));display:flex;justify-content:center;gap:18px;z-index:20}
-    button{width:62px;height:62px;border-radius:50%;border:2px solid #ffe116;background:rgba(40,32,0,.88);color:#ffe116;font-size:25px;box-shadow:0 5px 18px rgba(0,0,0,.45)}
-    #flash.on{background:#ffe116;color:#111;box-shadow:0 0 22px rgba(255,225,22,.8)}
-    #flash:disabled{opacity:.35}
-    #stop{display:none;background:#4a1010;color:#fff;border-color:#ff8a8a}
-    #rec{display:none;position:fixed;top:120px;left:50%;transform:translateX(-50%);z-index:20;background:rgba(0,0,0,.72);color:#fff;padding:8px 14px;border-radius:20px;font-weight:bold}
-    #preview{display:none;position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.94);align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px}
-    #preview img{max-width:92vw;max-height:72vh;border-radius:10px;border:2px solid #ffe116}
-    #preview .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-    #preview button{width:auto;height:auto;border-radius:9px;padding:12px 18px;font-size:16px}
-  </style>
-</head>
-<body>
-  <video id="video" autoplay muted playsinline></video>
-  <div id="overlay">
-    <div class="tint"></div>
-    <div class="topbar">
-      <div class="brand"><div class="paidex">PAIDEX</div><div class="sub">CICLISMO DE LONGA DISTÂNCIA</div></div>
-      <div class="datetime"><div class="date" id="dateText">--/--/----</div><div class="time" id="timeText">--:--:--</div></div>
-    </div>
-    <div class="mango">
-      <div class="stage">etapa</div>
-      <div class="fruit">🥭🥭🥭</div>
-      <div class="title">MANGA</div>
-      <div class="place">Peixe-Boi</div>
-    </div>
-    <div class="distance">150KM</div>
-    <div class="slogan">DESISTIR NÃO É UMA OPÇÃO!</div>
-  </div>
-
-  <div id="rec">🔴 REC 00:00</div>
-  <div id="controls">
-    <button id="switch" title="Trocar câmera">🔄</button>
-    <button id="flash" title="Ligar/desligar flash" disabled>⚡</button>
-    <button id="capture" title="Tirar foto">📸</button>
-    <button id="start" title="Gravar vídeo">🎥</button>
-    <button id="stop" title="Parar gravação">⏹</button>
-  </div>
-
-  <canvas id="photoCanvas" hidden></canvas>
-  <canvas id="recordCanvas" hidden></canvas>
-  <div id="preview"><img id="photoPreview" alt="Prévia"><div class="row"><button id="savePhoto">Salvar foto</button><button id="retry">Voltar</button></div></div>
-
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111"><title>PAIDEX - Ciclismo de Longa Distância</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:Arial,sans-serif}#video{position:fixed;inset:0;width:100vw;height:100vh;object-fit:cover;filter:saturate(.85) contrast(1.05)}#overlay{position:fixed;inset:0;pointer-events:none;z-index:5}.tint{position:absolute;inset:0;background:linear-gradient(180deg,rgba(224,212,0,.20),rgba(74,59,0,.10) 45%,rgba(0,0,0,.34));mix-blend-mode:screen}.topbar{position:absolute;top:max(12px,env(safe-area-inset-top));left:16px;right:16px;display:flex;justify-content:space-between;gap:10px}.brand{color:#ffe116;text-shadow:0 3px 7px rgba(0,0,0,.75)}.paidex{font-weight:1000;font-style:italic;letter-spacing:-4px;font-size:clamp(48px,15vw,92px);line-height:.8}.sub{font-size:clamp(12px,3.2vw,19px);font-style:italic;font-weight:700;margin-left:8px;margin-top:7px}.datetime{background:rgba(45,28,5,.78);border:2px solid #ffe116;color:#ffe116;border-radius:14px;padding:8px 10px;text-align:center;min-width:112px}.datetime .date{font-size:17px;font-weight:900}.datetime .time{font-size:13px;font-weight:800}.mango{position:absolute;left:18px;top:25%;color:#fff;text-shadow:0 3px 8px rgba(0,0,0,.8)}.stage{font-family:cursive;font-size:clamp(20px,5vw,32px);font-style:italic}.fruit{font-size:clamp(34px,9vw,58px);line-height:1}.mtitle{color:#ffd21d;font-size:clamp(24px,7vw,46px);font-weight:1000}.place{font-family:cursive;font-size:clamp(22px,6vw,40px);font-style:italic}.distance{position:absolute;left:10px;right:10px;bottom:95px;color:rgba(88,48,26,.62);font-weight:1000;font-size:clamp(92px,34vw,210px);line-height:.65;text-align:center;letter-spacing:-10px}.slogan{position:absolute;left:0;right:0;bottom:82px;text-align:center;color:#fff;font-size:clamp(20px,5.8vw,38px);font-style:italic;font-weight:900;text-shadow:0 4px 8px #000;padding:0 12px}#controls{position:fixed;left:0;right:0;bottom:max(18px,env(safe-area-inset-bottom));display:flex;justify-content:center;gap:18px;z-index:20}button{width:62px;height:62px;border-radius:50%;border:2px solid #ffe116;background:rgba(40,32,0,.88);color:#ffe116;font-size:25px;box-shadow:0 5px 18px rgba(0,0,0,.45)}#flash.on{background:#ffe116;color:#111;box-shadow:0 0 22px rgba(255,225,22,.8)}#stop{display:none;background:#4a1010;color:#fff;border-color:#ff8a8a}#screenFlash{position:fixed;inset:0;background:#fff8c9;opacity:0;pointer-events:none;z-index:100;transition:opacity .06s}#screenFlash.fire{opacity:1}#rec{display:none;position:fixed;top:120px;left:50%;transform:translateX(-50%);z-index:20;background:rgba(0,0,0,.72);color:#fff;padding:8px 14px;border-radius:20px;font-weight:bold}#preview{display:none;position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.94);align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px}#preview img{max-width:92vw;max-height:72vh;border:2px solid #ffe116;border-radius:10px}#preview .row{display:flex;gap:10px}#preview button{width:auto;height:auto;border-radius:9px;padding:12px 18px;font-size:16px}
+</style></head><body>
+<video id="video" autoplay muted playsinline></video><div id="overlay"><div class="tint"></div><div class="topbar"><div class="brand"><div class="paidex">PAIDEX</div><div class="sub">CICLISMO DE LONGA DISTÂNCIA</div></div><div class="datetime"><div class="date" id="dateText">--/--/----</div><div class="time" id="timeText">--:--:--</div></div></div><div class="mango"><div class="stage">etapa</div><div class="fruit">🥭🥭🥭</div><div class="mtitle">MANGA</div><div class="place">Peixe-Boi</div></div><div class="distance">150KM</div><div class="slogan">DESISTIR NÃO É UMA OPÇÃO!</div></div>
+<div id="screenFlash"></div><div id="rec">🔴 REC 00:00</div><div id="controls"><button id="switch">🔄</button><button id="flash" title="Flash de tela">⚡</button><button id="capture">📸</button><button id="start">🎥</button><button id="stop">⏹</button></div><canvas id="photoCanvas" hidden></canvas><canvas id="recordCanvas" hidden></canvas><div id="preview"><img id="photoPreview"><div class="row"><button id="savePhoto">Salvar foto</button><button id="retry">Voltar</button></div></div>
 <script>
-const video=document.getElementById('video'),photoCanvas=document.getElementById('photoCanvas'),recordCanvas=document.getElementById('recordCanvas');
-const switchBtn=document.getElementById('switch'),flashBtn=document.getElementById('flash'),captureBtn=document.getElementById('capture'),startBtn=document.getElementById('start'),stopBtn=document.getElementById('stop');
-const rec=document.getElementById('rec'),preview=document.getElementById('preview'),photoPreview=document.getElementById('photoPreview'),savePhoto=document.getElementById('savePhoto'),retry=document.getElementById('retry');
-const dateText=document.getElementById('dateText'),timeText=document.getElementById('timeText');
-let front=true,stream=null,recorder=null,chunks=[],recording=false,timer=null,t0=0,torchOn=false;
-
-function nowParts(){const d=new Date();return {date:d.toLocaleDateString('pt-BR'),time:d.toLocaleTimeString('pt-BR',{hour12:false})};}
-function updateClock(){const n=nowParts();dateText.textContent=n.date;timeText.textContent=n.time}
-updateClock();setInterval(updateClock,1000);
-
-function getVideoTrack(){return stream?.getVideoTracks?.()[0]||null;}
-function refreshFlashState(){
-  torchOn=false;flashBtn.classList.remove('on');flashBtn.disabled=true;
-  if(front)return;
-  const track=getVideoTrack();if(!track)return;
-  try{
-    const caps=track.getCapabilities?.()||{};
-    const supported=(caps.torch===true)||(Array.isArray(caps.torch)&&caps.torch.includes(true));
-    flashBtn.disabled=!supported;
-    flashBtn.title=supported?'Ligar flash':'Flash não disponível nesta câmera/navegador';
-  }catch(e){flashBtn.disabled=true;}
-}
-
-async function toggleFlash(){
-  if(front)return;
-  const track=getVideoTrack();if(!track)return;
-  try{
-    const caps=track.getCapabilities?.()||{};
-    const supported=(caps.torch===true)||(Array.isArray(caps.torch)&&caps.torch.includes(true));
-    if(!supported){flashBtn.disabled=true;alert('O Chrome não expôs o flash desta câmera para o site.');return;}
-    const next=!torchOn;
-    try{await track.applyConstraints({advanced:[{torch:next}]});}
-    catch(firstError){await track.applyConstraints({torch:next});}
-    torchOn=next;
-    flashBtn.classList.toggle('on',torchOn);
-    flashBtn.title=torchOn?'Desligar flash':'Ligar flash';
-  }catch(e){
-    torchOn=false;flashBtn.classList.remove('on');
-    alert('Não foi possível acionar o flash pelo navegador neste aparelho.');
-  }
-}
-flashBtn.onclick=toggleFlash;
-
-function drawOverlay(ctx,w,h){
-  const n=nowParts();ctx.save();ctx.fillStyle='rgba(220,205,0,.12)';ctx.fillRect(0,0,w,h);ctx.shadowColor='rgba(0,0,0,.8)';ctx.shadowBlur=12;ctx.fillStyle='#ffe116';ctx.font=`italic 1000 ${Math.round(w*.15)}px Arial`;ctx.textAlign='left';ctx.fillText('PAIDEX',w*.035,h*.105);ctx.font=`italic 700 ${Math.round(w*.034)}px Arial`;ctx.fillStyle='#fff';ctx.fillText('CICLISMO DE LONGA DISTÂNCIA',w*.05,h*.142);const bw=w*.27,bh=h*.075,bx=w-bw-w*.035,by=h*.035;ctx.shadowBlur=0;ctx.fillStyle='rgba(45,28,5,.80)';ctx.strokeStyle='#ffe116';ctx.lineWidth=Math.max(2,w*.004);ctx.beginPath();ctx.roundRect(bx,by,bw,bh,16);ctx.fill();ctx.stroke();ctx.fillStyle='#ffe116';ctx.textAlign='center';ctx.font=`900 ${Math.round(w*.034)}px Arial`;ctx.fillText(n.date,bx+bw/2,by+bh*.43);ctx.font=`800 ${Math.round(w*.027)}px Arial`;ctx.fillText(n.time,bx+bw/2,by+bh*.74);ctx.textAlign='left';ctx.shadowColor='rgba(0,0,0,.8)';ctx.shadowBlur=10;ctx.fillStyle='#fff';ctx.font=`italic ${Math.round(w*.045)}px cursive`;ctx.fillText('etapa',w*.045,h*.30);ctx.font=`${Math.round(w*.075)}px Arial`;ctx.fillText('🥭🥭🥭',w*.045,h*.36);ctx.fillStyle='#ffd21d';ctx.font=`1000 ${Math.round(w*.075)}px Arial`;ctx.fillText('MANGA',w*.045,h*.415);ctx.fillStyle='#fff';ctx.font=`italic ${Math.round(w*.052)}px cursive`;ctx.fillText('Peixe-Boi',w*.045,h*.46);ctx.textAlign='center';ctx.shadowBlur=0;ctx.fillStyle='rgba(90,50,25,.58)';ctx.font=`1000 ${Math.round(w*.28)}px Arial`;ctx.fillText('150KM',w/2,h*.88);ctx.shadowColor='#000';ctx.shadowBlur=10;ctx.fillStyle='#fff';ctx.font=`italic 900 ${Math.round(w*.045)}px Arial`;ctx.fillText('DESISTIR NÃO É UMA OPÇÃO!',w/2,h*.93);ctx.restore();
-}
-
-async function openCameraWith(constraints){return navigator.mediaDevices.getUserMedia({video:constraints,audio:true});}
-async function startCamera(){
-  if(stream)stream.getTracks().forEach(t=>t.stop());
-  torchOn=false;flashBtn.classList.remove('on');flashBtn.disabled=true;
-  try{
-    if(front){
-      stream=await openCameraWith({facingMode:{exact:'user'},width:{ideal:1920},height:{ideal:1080}}).catch(()=>openCameraWith({facingMode:'user',width:{ideal:1920},height:{ideal:1080}}));
-    }else{
-      stream=await openCameraWith({facingMode:{exact:'environment'},width:{ideal:1920},height:{ideal:1080}}).catch(()=>openCameraWith({facingMode:'environment',width:{ideal:1920},height:{ideal:1080}}));
-    }
-    video.srcObject=stream;video.style.transform=front?'scaleX(-1)':'none';
-    try{await video.play();}catch(e){}
-    if(video.readyState<2)await new Promise(r=>video.addEventListener('loadedmetadata',r,{once:true}));
-    setTimeout(refreshFlashState,500);
-  }catch(err){alert('Não foi possível abrir a câmera/microfone. Verifique as permissões do navegador.');}
-}
-
-switchBtn.onclick=()=>{front=!front;startCamera()};
-
-captureBtn.onclick=()=>{if(!stream)return;const track=getVideoTrack(),s=track.getSettings();const w=s.width||video.videoWidth||1280,h=s.height||video.videoHeight||720;photoCanvas.width=w;photoCanvas.height=h;const c=photoCanvas.getContext('2d');if(front){c.save();c.translate(w,0);c.scale(-1,1);c.drawImage(video,0,0,w,h);c.restore();}else c.drawImage(video,0,0,w,h);drawOverlay(c,w,h);photoPreview.src=photoCanvas.toDataURL('image/png');preview.style.display='flex';};
-savePhoto.onclick=()=>{const a=document.createElement('a');a.href=photoPreview.src;const n=nowParts();a.download=`paidex-${n.date.replaceAll('/','-')}-${n.time.replaceAll(':','-')}.png`;a.click();};retry.onclick=()=>preview.style.display='none';
-function startTimer(){t0=Date.now();rec.style.display='block';timer=setInterval(()=>{const sec=Math.floor((Date.now()-t0)/1000);rec.textContent=`🔴 REC ${String(Math.floor(sec/60)).padStart(2,'0')}:${String(sec%60).padStart(2,'0')}`},250)}function stopTimer(){clearInterval(timer);timer=null;rec.style.display='none'}
-startBtn.onclick=()=>{if(!stream||recording)return;if(typeof MediaRecorder==='undefined'||typeof recordCanvas.captureStream!=='function'){alert('Este navegador não suporta gravação de vídeo por esta página.');return;}const track=getVideoTrack(),s=track.getSettings(),cw=s.width||1280,ch=s.height||720,w=720,h=Math.round(ch*(w/cw));recordCanvas.width=w;recordCanvas.height=h;const ctx=recordCanvas.getContext('2d');recording=true;chunks=[];function frame(){if(!recording)return;ctx.clearRect(0,0,w,h);if(front){ctx.save();ctx.translate(w,0);ctx.scale(-1,1);ctx.drawImage(video,0,0,w,h);ctx.restore();}else ctx.drawImage(video,0,0,w,h);drawOverlay(ctx,w,h);requestAnimationFrame(frame)}frame();const cs=recordCanvas.captureStream(24),combined=new MediaStream();cs.getVideoTracks().forEach(t=>combined.addTrack(t));stream.getAudioTracks().forEach(t=>combined.addTrack(t));let opts={};if(MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus'))opts.mimeType='video/webm;codecs=vp8,opus';recorder=new MediaRecorder(combined,opts);recorder.ondataavailable=e=>{if(e.data?.size)chunks.push(e.data)};recorder.onstop=()=>{const blob=new Blob(chunks,{type:recorder.mimeType||'video/webm'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;const n=nowParts();a.download=`paidex-${n.date.replaceAll('/','-')}-${n.time.replaceAll(':','-')}.webm`;a.click();setTimeout(()=>URL.revokeObjectURL(url),3000)};recorder.start();startBtn.style.display='none';stopBtn.style.display='inline-block';startTimer();};
-stopBtn.onclick=()=>{if(recorder?.state==='recording')recorder.stop();recording=false;stopBtn.style.display='none';startBtn.style.display='inline-block';stopTimer();};
-startCamera();
-</script>
-</body>
-</html>
+const video=document.getElementById('video'),photoCanvas=document.getElementById('photoCanvas'),recordCanvas=document.getElementById('recordCanvas'),switchBtn=document.getElementById('switch'),flashBtn=document.getElementById('flash'),captureBtn=document.getElementById('capture'),startBtn=document.getElementById('start'),stopBtn=document.getElementById('stop'),screenFlash=document.getElementById('screenFlash'),rec=document.getElementById('rec'),preview=document.getElementById('preview'),photoPreview=document.getElementById('photoPreview'),savePhoto=document.getElementById('savePhoto'),retry=document.getElementById('retry'),dateText=document.getElementById('dateText'),timeText=document.getElementById('timeText');let front=true,stream=null,recorder=null,chunks=[],recording=false,timer=null,t0=0,screenFlashOn=false;
+function nowParts(){const d=new Date();return{date:d.toLocaleDateString('pt-BR'),time:d.toLocaleTimeString('pt-BR',{hour12:false})}}function updateClock(){const n=nowParts();dateText.textContent=n.date;timeText.textContent=n.time}updateClock();setInterval(updateClock,1000);
+flashBtn.onclick=()=>{screenFlashOn=!screenFlashOn;flashBtn.classList.toggle('on',screenFlashOn);flashBtn.title=screenFlashOn?'Flash de tela ligado':'Flash de tela desligado'};
+function drawOverlay(c,w,h){const n=nowParts();c.save();c.fillStyle='rgba(220,205,0,.12)';c.fillRect(0,0,w,h);c.shadowColor='rgba(0,0,0,.8)';c.shadowBlur=12;c.fillStyle='#ffe116';c.font=`italic 1000 ${Math.round(w*.15)}px Arial`;c.textAlign='left';c.fillText('PAIDEX',w*.035,h*.105);c.font=`italic 700 ${Math.round(w*.034)}px Arial`;c.fillStyle='#fff';c.fillText('CICLISMO DE LONGA DISTÂNCIA',w*.05,h*.142);const bw=w*.27,bh=h*.075,bx=w-bw-w*.035,by=h*.035;c.shadowBlur=0;c.fillStyle='rgba(45,28,5,.80)';c.strokeStyle='#ffe116';c.lineWidth=Math.max(2,w*.004);c.beginPath();c.roundRect(bx,by,bw,bh,16);c.fill();c.stroke();c.fillStyle='#ffe116';c.textAlign='center';c.font=`900 ${Math.round(w*.034)}px Arial`;c.fillText(n.date,bx+bw/2,by+bh*.43);c.font=`800 ${Math.round(w*.027)}px Arial`;c.fillText(n.time,bx+bw/2,by+bh*.74);c.textAlign='left';c.shadowColor='#000';c.shadowBlur=10;c.fillStyle='#fff';c.font=`italic ${Math.round(w*.045)}px cursive`;c.fillText('etapa',w*.045,h*.30);c.font=`${Math.round(w*.075)}px Arial`;c.fillText('🥭🥭🥭',w*.045,h*.36);c.fillStyle='#ffd21d';c.font=`1000 ${Math.round(w*.075)}px Arial`;c.fillText('MANGA',w*.045,h*.415);c.fillStyle='#fff';c.font=`italic ${Math.round(w*.052)}px cursive`;c.fillText('Peixe-Boi',w*.045,h*.46);c.textAlign='center';c.shadowBlur=0;c.fillStyle='rgba(90,50,25,.58)';c.font=`1000 ${Math.round(w*.28)}px Arial`;c.fillText('150KM',w/2,h*.88);c.shadowColor='#000';c.shadowBlur=10;c.fillStyle='#fff';c.font=`italic 900 ${Math.round(w*.045)}px Arial`;c.fillText('DESISTIR NÃO É UMA OPÇÃO!',w/2,h*.93);c.restore()}
+async function startCamera(){if(stream)stream.getTracks().forEach(t=>t.stop());try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:front?'user':'environment',width:{ideal:1920},height:{ideal:1080}},audio:true});video.srcObject=stream;video.style.transform=front?'scaleX(-1)':'none'}catch(e){alert('Não foi possível abrir a câmera/microfone.')}}switchBtn.onclick=()=>{front=!front;startCamera()};
+function takePhoto(){const t=stream.getVideoTracks()[0],s=t.getSettings(),w=s.width||video.videoWidth||1280,h=s.height||video.videoHeight||720;photoCanvas.width=w;photoCanvas.height=h;const c=photoCanvas.getContext('2d');if(front){c.save();c.translate(w,0);c.scale(-1,1);c.drawImage(video,0,0,w,h);c.restore()}else c.drawImage(video,0,0,w,h);drawOverlay(c,w,h);photoPreview.src=photoCanvas.toDataURL('image/png');preview.style.display='flex'}
+captureBtn.onclick=async()=>{if(!stream)return;if(screenFlashOn){screenFlash.classList.add('fire');await new Promise(r=>setTimeout(r,180));takePhoto();setTimeout(()=>screenFlash.classList.remove('fire'),100)}else takePhoto()};savePhoto.onclick=()=>{const a=document.createElement('a'),n=nowParts();a.href=photoPreview.src;a.download=`paidex-${n.date.replaceAll('/','-')}-${n.time.replaceAll(':','-')}.png`;a.click()};retry.onclick=()=>preview.style.display='none';
+function startTimer(){t0=Date.now();rec.style.display='block';timer=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);rec.textContent=`🔴 REC ${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`},250)}function stopTimer(){clearInterval(timer);rec.style.display='none'}startBtn.onclick=()=>{if(!stream||recording)return;if(typeof MediaRecorder==='undefined'||typeof recordCanvas.captureStream!=='function'){alert('Este navegador não suporta gravação de vídeo.');return}const s=stream.getVideoTracks()[0].getSettings(),cw=s.width||1280,ch=s.height||720,w=720,h=Math.round(ch*(w/cw));recordCanvas.width=w;recordCanvas.height=h;const c=recordCanvas.getContext('2d');recording=true;chunks=[];function frame(){if(!recording)return;c.clearRect(0,0,w,h);if(front){c.save();c.translate(w,0);c.scale(-1,1);c.drawImage(video,0,0,w,h);c.restore()}else c.drawImage(video,0,0,w,h);drawOverlay(c,w,h);requestAnimationFrame(frame)}frame();const cs=recordCanvas.captureStream(24),combined=new MediaStream();cs.getVideoTracks().forEach(t=>combined.addTrack(t));stream.getAudioTracks().forEach(t=>combined.addTrack(t));let opts={};if(MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus'))opts.mimeType='video/webm;codecs=vp8,opus';recorder=new MediaRecorder(combined,opts);recorder.ondataavailable=e=>{if(e.data?.size)chunks.push(e.data)};recorder.onstop=()=>{const b=new Blob(chunks,{type:recorder.mimeType||'video/webm'}),u=URL.createObjectURL(b),a=document.createElement('a'),n=nowParts();a.href=u;a.download=`paidex-${n.date.replaceAll('/','-')}-${n.time.replaceAll(':','-')}.webm`;a.click();setTimeout(()=>URL.revokeObjectURL(u),3000)};recorder.start();startBtn.style.display='none';stopBtn.style.display='inline-block';startTimer()};stopBtn.onclick=()=>{if(recorder?.state==='recording')recorder.stop();recording=false;stopBtn.style.display='none';startBtn.style.display='inline-block';stopTimer()};startCamera();
+</script></body></html>
