@@ -2,49 +2,58 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#444D55"><title>Conecta 2026 • Câmera Teste</title>
+<meta name="theme-color" content="#050705"><title>Conecta 2026 • Câmera Teste</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#1f252a;font-family:Arial,sans-serif;color:#fff}
-video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover}.mirror{transform:scaleX(-1)}
-#shade{position:fixed;inset:0;pointer-events:none;background:linear-gradient(#0009,transparent 25%,transparent 60%,#000e)}
-header{position:fixed;z-index:5;top:14px;left:14px;right:14px;display:flex;align-items:center;gap:10px}
-#logo{width:72px;height:50px;object-fit:contain}.name{font-size:25px;font-weight:900}.name b{color:#43807A}.sub{font-size:10px;font-weight:700}
-#tag{position:fixed;z-index:5;top:83px;left:14px;border-left:3px solid #43807A;background:#0008;padding:7px 10px;font-size:12px;font-weight:900}
-#tools{position:fixed;z-index:10;right:12px;top:14px;display:flex;gap:7px}.tool{width:42px;height:42px;border:0;border-radius:50%;background:#000a;color:#fff;font-size:19px}.tool.on{background:#43807A;color:#fff}
-#format{position:fixed;z-index:10;right:14px;top:64px;border:1px solid #ffffff55;background:#000a;color:#fff;border-radius:18px;padding:6px 10px}
-#panel{position:fixed;z-index:10;bottom:10px;left:0;right:0}.row{display:flex;gap:7px;overflow-x:auto;padding:4px 12px;scrollbar-width:none}.row::-webkit-scrollbar{display:none}
-.pill{white-space:nowrap;border:1px solid #ffffff45;background:rgba(68,77,85,.86);color:#fff;border-radius:20px;padding:8px 11px;font-size:10px;font-weight:800}.pill.active{border-color:#43807A;color:#fff;background:rgba(67,128,122,.72)}
-#modes{text-align:center;font-size:11px;font-weight:800;margin:4px}#modes span{padding:5px 9px}#modes .active{color:#43807A}
-#captureRow{height:76px;display:flex;justify-content:center;align-items:center;gap:25px}.small{width:48px;height:48px;border-radius:50%;border:1px solid #ffffff66;background:rgba(74,48,65,.86);color:#fff;font-size:20px}
-#shot,#record{width:67px;height:67px;border-radius:50%;border:5px solid #fff;box-shadow:0 0 0 3px #43807A}#shot{background:transparent}#record{display:none;background:#d72e2e}#stop{display:none;background:#B95946}
-#flashScreen{position:fixed;z-index:30;inset:0;background:#fff;opacity:0;pointer-events:none}#flashScreen.fire{opacity:1}
-#preview{display:none;position:fixed;z-index:40;inset:0;background:#444D55;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:15px}#preview img{max-width:94vw;max-height:78vh;border-radius:12px}
-#preview button{position:relative;z-index:50;border:1px solid #43807A;background:#4A3041;color:#fff;border-radius:20px;padding:12px 18px;font-weight:700;touch-action:manipulation}
-
-/* Moldura temática por área */
-#themeFrame{position:fixed;z-index:6;left:8px;right:8px;top:122px;bottom:238px;pointer-events:none}
-.themeIcon{position:absolute;font-size:clamp(22px,6vw,34px);filter:drop-shadow(0 2px 5px rgba(0,0,0,.55));opacity:.96}
-.themeIcon.tl1{left:8px;top:10px}.themeIcon.tl2{left:8px;top:30%}.themeIcon.bl1{left:8px;bottom:28%}.themeIcon.bl2{left:8px;bottom:8px}
-.themeIcon.tr1{right:8px;top:10px}.themeIcon.tr2{right:8px;top:30%}.themeIcon.br1{right:8px;bottom:28%}.themeIcon.br2{right:8px;bottom:8px}
-.themeLine{position:absolute;background:linear-gradient(180deg,var(--c4),var(--c2),var(--c7));opacity:.65;border-radius:999px}
-.themeLine.left{left:1px;top:52px;bottom:52px;width:3px}.themeLine.right{right:1px;top:52px;bottom:52px;width:3px}
-.themeTop,.themeBottom{position:absolute;left:52px;right:52px;height:2px;background:linear-gradient(90deg,var(--c5),var(--c4),var(--c7));opacity:.55}
-.themeTop{top:1px}.themeBottom{bottom:1px}
+:root{--slate:#444D55;--steel:#768692;--gray:#8C8C8C;--teal:#43807A;--sand:#C5B9AC;--wine:#4A3041;--rust:#B95946}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111;font-family:Arial,sans-serif;color:#fff}
+#stage{position:fixed;inset:0;background:#111;overflow:hidden}
+#video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.mirror{transform:scaleX(-1)}
+#fx{position:absolute;inset:0;pointer-events:none}
+#brand{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(20,24,26,.58) 0%,transparent 22%,transparent 56%,rgba(15,18,19,.80) 79%,rgba(12,14,15,.96) 100%)}
+.topShade,.bottomShade,.frame{display:none}
+.top{position:absolute;top:max(18px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:min(78vw,390px);display:flex;align-items:center;justify-content:center;gap:13px}
+.logo{width:92px!important;height:60px!important;object-fit:contain!important;filter:drop-shadow(0 2px 5px #000)}
+.headline{border-left:2px solid rgba(255,255,255,.75);padding-left:13px!important}
+.headline .main{font-size:clamp(23px,7vw,35px)!important;line-height:.9!important;letter-spacing:.5px!important}.headline .main span{display:block;color:var(--teal)!important}
+.headline .dept{font-size:clamp(9px,2.5vw,12px)!important;line-height:1.1;margin-top:5px!important}
+.innovation{display:none}
+.areaTag{position:absolute!important;top:auto!important;left:0!important;right:0!important;bottom:31%!important;text-align:center;background:none!important;border:0!important;padding:0 20px!important;font-size:clamp(24px,7vw,38px)!important;letter-spacing:5px!important;color:var(--teal);text-shadow:0 3px 8px #000;font-weight:800!important}
+.areaTag::after{content:"Na Alunorte nós inovamos";display:block;color:var(--sand);font-size:clamp(14px,4vw,20px);letter-spacing:0;font-weight:500;margin-top:13px}
+#themeFrame{position:absolute;inset:0;pointer-events:none}
+.themeIcon{position:absolute;font-size:clamp(25px,7vw,38px);filter:drop-shadow(0 3px 5px #000);opacity:.82}
+.themeIcon:nth-child(1){left:5%;top:18%}.themeIcon:nth-child(2){right:5%;top:20%}.themeIcon:nth-child(3){left:5%;top:36%}.themeIcon:nth-child(4){right:5%;top:39%}.themeIcon:nth-child(5){left:5%;top:54%}.themeIcon:nth-child(6){right:5%;top:56%}.themeIcon:nth-child(7){left:5%;top:69%}.themeIcon:nth-child(8){right:5%;top:70%}
+#topActions{position:absolute;z-index:12;top:max(16px,env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between}
+.iconBtn{width:43px;height:43px;border:0;background:transparent;color:#fff;font-size:25px;text-shadow:0 2px 5px #000}.iconBtn.on{color:var(--rust)}
+#format{position:absolute;z-index:13;left:50%;transform:translateX(-50%);right:auto!important;top:auto!important;bottom:15.5%;width:min(62vw,300px);height:42px;background:rgba(20,24,26,.82);border:1px solid rgba(255,255,255,.15);border-radius:15px;color:#fff;font-size:0}
+#format::after{content:"9:16   STORY      4:5   POST      1:1   QUADRADO";font-size:10px;word-spacing:4px}
+.panel{position:absolute;z-index:15;left:0;right:0;bottom:max(4px,env(safe-area-inset-bottom));height:29%}
+.mode{position:absolute;left:17%;bottom:4%;font-size:11px!important;letter-spacing:0!important}.mode span{padding:6px!important}.mode .active{color:var(--teal)!important}
+.areas{position:absolute;left:0;right:0;top:0;display:flex!important;justify-content:center;gap:3px!important;padding:0 5px!important;overflow:visible!important}
+.areas .pill{border:0!important;background:transparent!important;border-radius:0!important;padding:7px 7px!important;font-size:clamp(9px,2.5vw,12px)!important;color:var(--gray)}
+.areas .pill.active{color:var(--teal)!important;border-bottom:2px solid var(--teal)!important}
+.effects{position:absolute;right:2%;bottom:1%;left:51%;padding:0!important;display:flex!important;gap:5px!important;overflow-x:auto!important}
+.effects .pill{min-width:48px;height:58px;border:2px solid transparent!important;border-radius:12px!important;padding:34px 3px 2px!important;background:linear-gradient(135deg,var(--steel),var(--teal))!important;font-size:8px!important;color:#fff!important}
+.effects .pill:nth-child(2){background:linear-gradient(135deg,var(--teal),var(--sand))!important}
+.effects .pill:nth-child(3){background:linear-gradient(135deg,var(--steel),var(--gray))!important}
+.effects .pill:nth-child(4){background:linear-gradient(135deg,var(--rust),var(--sand))!important}
+.effects .pill:nth-child(5){background:linear-gradient(135deg,#333,#aaa)!important}
+.effects .pill.active{border-color:var(--teal)!important}
+.captureRow{position:absolute;left:0;right:0;bottom:0;height:76px!important;display:flex!important;justify-content:center!important;align-items:center!important;gap:25px!important}
+.small{width:50px!important;height:50px!important;border-radius:12px!important;border:2px solid #fff!important;background:rgba(68,77,85,.82)!important;color:#fff!important}
+#shot,#record{width:70px!important;height:70px!important;border-radius:50%!important;border:5px solid #fff!important;box-shadow:0 0 0 2px rgba(255,255,255,.7)!important}
+#shot{background:#fff!important}#record{background:var(--rust)!important}
+#stop{display:none;background:var(--rust)!important}
+#screenFlash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:100}#screenFlash.fire{opacity:1}
+#status,#rec{display:none!important}
+#preview{display:none;position:fixed;inset:0;z-index:40;background:#15191b;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:15px}
+#preview img{max-width:94vw;max-height:78vh;border-radius:12px}
+#preview button{position:relative;z-index:50;border:1px solid var(--teal);background:var(--slate);color:#fff;border-radius:20px;padding:12px 18px;font-weight:700;touch-action:manipulation}
 </style></head>
 <body>
 <video id="video" autoplay muted playsinline></video><div id="shade"></div>
 <header><img id="logo" src="logo-hydro.png"><div><div class="name">CONECTA <b>2026</b></div><div class="sub">Gerência de Energia e Automação</div></div></header>
 <div id="tag">CONECTA 2026 • GERAL</div>
-<div id="themeFrame">
-  <div class="themeTop"></div><div class="themeBottom"></div>
-  <div class="themeLine left"></div><div class="themeLine right"></div>
-  <span class="themeIcon tl1"></span><span class="themeIcon tl2"></span>
-  <span class="themeIcon bl1"></span><span class="themeIcon bl2"></span>
-  <span class="themeIcon tr1"></span><span class="themeIcon tr2"></span>
-  <span class="themeIcon br1"></span><span class="themeIcon br2"></span>
-</div>
-
-<div id="tools"><button class="tool" id="flip">🔄</button><button class="tool" id="flash">⚡</button></div><button id="format">9:16</button>
+<div id="tools"><button class="tool" id="flip">🔄</button><button class="tool" id="flash">⚡</button></div><button id="format" data-current="9:16">9:16</button>
 <div id="panel"><div id="modes"><span id="photoMode" class="active">FOTO</span><span id="videoMode">VÍDEO</span></div>
 <div class="row" id="areas"><button class="pill active" data-area="geral">GERAL</button><button class="pill" data-area="operacao">⚡ OPERAÇÃO</button><button class="pill" data-area="manutencao">🔧 MANUTENÇÃO</button><button class="pill" data-area="automacao">⚙ AUTOMAÇÃO</button></div>
 <div class="row" id="effects"><button class="pill active" data-fx="natural">NATURAL</button><button class="pill" data-fx="vivo">VIVO</button><button class="pill" data-fx="frio">FRIO</button><button class="pill" data-fx="quente">QUENTE</button><button class="pill" data-fx="pb">P&B</button></div>
@@ -86,32 +95,20 @@ let mediaRecorder = null;
 let chunks = [];
 
 const labels = {
-  geral: 'CONECTA 2026 • GERAL',
+  geral: 'CONECTA',
   operacao: 'OPERAÇÃO DO SISTEMA ELÉTRICO',
   manutencao: 'MANUTENÇÃO DO SISTEMA ELÉTRICO',
   automacao: 'AUTOMAÇÃO'
 };
-
-const themes = {
-  geral: ['⚡','🖥️','🔧','⚙️','🤖','💻','📡','🛠️'],
-  operacao: ['🖥️','🖥️','📊','⚡','🛰️','🎛️','🔌','📟'],
-  manutencao: ['🔧','🛠️','⚙️','🧰','🔩','🔌','🪛','🧲'],
-  automacao: ['🤖','🦾','💻','⌨️','🧠','📡','⚙️','</>']
+const themeIcons={
+  geral:['⚡','🖥️','🔧','⚙️','🤖','💻','📡','🛠️'],
+  operacao:['⚡','🖥️','📊','🎛️','📟','🔌','🛰️','🛡️'],
+  manutencao:['🔧','🛠️','⚙️','🧰','🔩','🪛','📏','🔌'],
+  automacao:['🤖','🦾','💻','⌨️','📡','⚙️','🧠','💾']
 };
-
-const areaColors = {
-  geral: '#43807A',
-  operacao: '#768692',
-  manutencao: '#B95946',
-  automacao: '#4A3041'
-};
-
-function applyTheme(){
-  document.documentElement.style.setProperty('--accent', areaColors[area]);
-  const els=[...document.querySelectorAll('#themeFrame .themeIcon')];
-  themes[area].forEach((ic,i)=>{ if(els[i]) els[i].textContent=ic; });
-  const accent=areaColors[area];
-  document.querySelectorAll('.pill.active').forEach(x=>x.style.borderColor=accent);
+function refreshIcons(){
+  const icons=document.querySelectorAll('#themeFrame .themeIcon');
+  (themeIcons[area]||themeIcons.geral).forEach((x,i)=>{if(icons[i])icons[i].textContent=x});
 }
 
 const filters = {
@@ -145,7 +142,7 @@ async function openCam(facing) {
 }
 
 openCam('user').catch(() => alert('Permita acesso à câmera e ao microfone.'));
-applyTheme();
+refreshIcons();
 
 flipBtn.addEventListener('click', async () => {
   if (recording) return;
@@ -167,7 +164,7 @@ document.querySelectorAll('[data-area]').forEach(btn => {
     btn.classList.add('active');
     area = btn.dataset.area;
     tag.textContent = labels[area];
-    applyTheme();
+    refreshIcons();
   });
 });
 
@@ -182,7 +179,7 @@ document.querySelectorAll('[data-fx]').forEach(btn => {
 
 formatBtn.addEventListener('click', () => {
   ratio = ratio === '9:16' ? '4:5' : ratio === '4:5' ? '1:1' : '9:16';
-  formatBtn.textContent = ratio;
+  formatBtn.textContent = ratio; formatBtn.dataset.current=ratio;
 });
 
 function setMode(mode) {
@@ -273,22 +270,6 @@ function drawOverlayExactly(ctx, w, h) {
   ctx.fillStyle = bottom;
   ctx.fillRect(0, h * .58, w, h * .42);
 
-  // Moldura temática também gravada na foto/vídeo
-  const icons = themes[area];
-  const accent = areaColors[area];
-  ctx.save();
-  ctx.globalAlpha = .95;
-  ctx.strokeStyle = accent;
-  ctx.lineWidth = Math.max(2, 2*s);
-  ctx.strokeRect(8*s, 118*s, w-16*s, h-230*s);
-  ctx.font = `${30*s}px Arial`;
-  ctx.textAlign='center';
-  const L=22*s, R=w-22*s;
-  const y1=155*s, y2=h*.35, y3=h*.60, y4=h-155*s;
-  const ys=[y1,y2,y3,y4];
-  for(let i=0;i<4;i++){ctx.fillText(icons[i],L,ys[i]);ctx.fillText(icons[i+4],R,ys[i]);}
-  ctx.restore();
-
   // Logo
   const left = 14 * sx;
   const topY = 14 * sy;
@@ -311,7 +292,7 @@ function drawOverlayExactly(ctx, w, h) {
   ctx.fillStyle = '#fff';
   ctx.fillText('CONECTA', titleX, topY + 23*s);
   const conectaWidth = ctx.measureText('CONECTA ').width;
-  ctx.fillStyle = areaColors[area];
+  ctx.fillStyle = '#55cf67';
   ctx.fillText('2026', titleX + conectaWidth, topY + 23*s);
 
   ctx.fillStyle = '#fff';
@@ -330,7 +311,7 @@ function drawOverlayExactly(ctx, w, h) {
   roundedRect(ctx, tagX, tagY, textW + tagPadX*2 + 4*s, 28*s, 3*s);
   ctx.fill();
 
-  ctx.fillStyle = areaColors[area];
+  ctx.fillStyle = '#55cf67';
   ctx.fillRect(tagX, tagY, 3*s, 28*s);
 
   ctx.fillStyle = '#fff';
