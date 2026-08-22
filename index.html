@@ -1,274 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050708">
-<title>Conecta 2026 - Gerência de Energia e Automação</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050705"><title>Conecta 2026 • Câmera Teste</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;height:100%;overflow:hidden;background:#050708;font-family:Arial,sans-serif}
-#video{position:fixed;inset:0;width:100vw;height:100vh;object-fit:cover;filter:saturate(.88) contrast(1.04)}
-#overlay{position:fixed;inset:0;pointer-events:none;z-index:5}
-.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.04) 28%,rgba(0,0,0,0) 64%,rgba(0,0,0,.72) 100%)}
-.tech{position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(84,207,103,.018) 0 1px,transparent 1px 46px),repeating-linear-gradient(0deg,rgba(84,207,103,.014) 0 1px,transparent 1px 46px)}
-.header{position:absolute;top:max(14px,env(safe-area-inset-top));left:14px;right:14px;display:flex;align-items:flex-start;gap:12px}
-.logo{width:96px;height:66px;object-fit:contain;object-position:left center;filter:drop-shadow(0 2px 6px #000)}
-.headline{padding-top:3px}
-.headline .main{color:#fff;font-size:clamp(24px,7vw,44px);font-weight:900;line-height:.95;letter-spacing:-1.5px;text-shadow:0 3px 10px #000}
-.headline .main span{color:#54cf67}
-.headline .dept{margin-top:5px;color:#fff;font-size:clamp(11px,3vw,17px);font-weight:700;text-shadow:0 2px 6px #000}
-.innovation{position:absolute;top:104px;left:16px;color:#54cf67;letter-spacing:6px;font-size:clamp(12px,3.2vw,18px);font-weight:800;text-shadow:0 2px 6px #000}
-.focus{position:absolute;left:18px;right:18px;top:145px;bottom:225px;border:1px solid rgba(84,207,103,.32);border-radius:20px}
-.corner{position:absolute;width:42px;height:42px;border-color:#54cf67;border-style:solid;filter:drop-shadow(0 0 6px rgba(84,207,103,.25))}
-.tl{top:14px;left:14px;border-width:2px 0 0 2px}.tr{top:14px;right:14px;border-width:2px 2px 0 0}
-.bl{bottom:14px;left:14px;border-width:0 0 2px 2px}.br{bottom:14px;right:14px;border-width:0 2px 2px 0}
-.areas{position:absolute;left:10px;right:10px;bottom:88px;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
-.area{text-align:center;color:#fff;font-size:9px;text-shadow:0 2px 4px #000}
-.area b{display:block;color:#54cf67;font-size:10px;margin-top:3px}
-.area .ico{font-size:22px;color:#54cf67}
-.area:not(:last-child){border-right:1px solid rgba(84,207,103,.35)}
-#controls{position:fixed;left:0;right:0;bottom:max(16px,env(safe-area-inset-bottom));display:flex;justify-content:center;gap:12px;z-index:20}
-button{width:56px;height:56px;border-radius:50%;border:2px solid #54cf67;background:rgba(5,10,8,.90);color:#fff;font-size:22px;box-shadow:0 4px 16px rgba(0,0,0,.55)}
-#flash.on{background:#54cf67;color:#061008}
-#stop{display:none;background:#6c1717;border-color:#ff8f8f}
-#cameraSelect{position:fixed;z-index:21;right:10px;top:142px;max-width:170px;background:#0b0f0c;color:#fff;border:1px solid #54cf67;border-radius:8px;padding:6px;font-size:11px;display:none}
-#screenFlash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:100;transition:opacity .05s}
-#screenFlash.fire{opacity:1}
-#status{position:fixed;z-index:21;top:120px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);color:#fff;padding:4px 8px;border-radius:12px;font-size:10px;white-space:nowrap}
-#rec{display:none;position:fixed;z-index:21;top:150px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fff;padding:6px 10px;border-radius:14px;font-size:12px;font-weight:700}
-#preview{display:none;position:fixed;inset:0;z-index:30;background:#050708f2;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px}
-#preview img{max-width:92vw;max-height:72vh;border:2px solid #54cf67;border-radius:10px}
-#preview button{width:auto;height:auto;border-radius:8px;padding:10px 14px;font-size:15px}
-</style>
-</head>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;font-family:Arial,sans-serif;color:#fff}
+video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover}.mirror{transform:scaleX(-1)}
+#shade{position:fixed;inset:0;pointer-events:none;background:linear-gradient(#0009,transparent 25%,transparent 60%,#000e)}
+header{position:fixed;z-index:5;top:14px;left:14px;right:14px;display:flex;align-items:center;gap:10px}
+#logo{width:72px;height:50px;object-fit:contain}.name{font-size:25px;font-weight:900}.name b{color:#55cf67}.sub{font-size:10px;font-weight:700}
+#tag{position:fixed;z-index:5;top:83px;left:14px;border-left:3px solid #55cf67;background:#0008;padding:7px 10px;font-size:12px;font-weight:900}
+#tools{position:fixed;z-index:10;right:12px;top:14px;display:flex;gap:7px}.tool{width:42px;height:42px;border:0;border-radius:50%;background:#000a;color:#fff;font-size:19px}.tool.on{background:#55cf67;color:#071009}
+#format{position:fixed;z-index:10;right:14px;top:64px;border:1px solid #ffffff55;background:#000a;color:#fff;border-radius:18px;padding:6px 10px}
+#panel{position:fixed;z-index:10;bottom:10px;left:0;right:0}.row{display:flex;gap:7px;overflow-x:auto;padding:4px 12px;scrollbar-width:none}.row::-webkit-scrollbar{display:none}
+.pill{white-space:nowrap;border:1px solid #ffffff45;background:#080a08cc;color:#fff;border-radius:20px;padding:8px 11px;font-size:10px;font-weight:800}.pill.active{border-color:#55cf67;color:#8cff9b;background:#18351ddd}
+#modes{text-align:center;font-size:11px;font-weight:800;margin:4px}#modes span{padding:5px 9px}#modes .active{color:#55cf67}
+#captureRow{height:76px;display:flex;justify-content:center;align-items:center;gap:25px}.small{width:48px;height:48px;border-radius:50%;border:1px solid #ffffff66;background:#090b09dd;color:#fff;font-size:20px}
+#shot,#record{width:67px;height:67px;border-radius:50%;border:5px solid #fff;box-shadow:0 0 0 3px #55cf67}#shot{background:transparent}#record{display:none;background:#d72e2e}#stop{display:none;background:#9b1d1d}
+#flashScreen{position:fixed;z-index:30;inset:0;background:#fff;opacity:0;pointer-events:none}#flashScreen.fire{opacity:1}
+#preview{display:none;position:fixed;z-index:40;inset:0;background:#050705;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:15px}#preview img{max-width:94vw;max-height:78vh;border-radius:12px}
+#preview button{border:1px solid #55cf67;background:#111;color:#fff;border-radius:20px;padding:10px 15px;font-weight:700}
+</style></head>
 <body>
-<video id="video" autoplay muted playsinline></video>
-
-<div id="overlay">
-  <div class="shade"></div>
-  <div class="tech"></div>
-  <div class="header">
-    <img src="logo-hydro.png" class="logo" alt="Hydro">
-    <div class="headline">
-      <div class="main">CONECTA <span>2026</span></div>
-      <div class="dept">Gerência de Energia e Automação</div>
-    </div>
-  </div>
-  <div class="innovation">INOVAÇÃO</div>
-  <div class="focus">
-    <i class="corner tl"></i><i class="corner tr"></i>
-    <i class="corner bl"></i><i class="corner br"></i>
-  </div>
-  <div class="areas">
-    <div class="area"><div class="ico">⚡</div><b>ENERGIA</b></div>
-    <div class="area"><div class="ico">⚙</div><b>AUTOMAÇÃO</b></div>
-    <div class="area"><div class="ico">▣</div><b>OPERAÇÃO</b></div>
-    <div class="area"><div class="ico">🔧</div><b>MANUTENÇÃO</b></div>
-  </div>
-</div>
-
-<div id="status">Câmera frontal</div>
-<select id="cameraSelect"></select>
-<div id="screenFlash"></div>
-<div id="rec">🔴 REC 00:00</div>
-
-<div id="controls">
-  <button id="switch" title="Trocar câmera">🔄</button>
-  <button id="flash" title="Ativar flash no disparo">⚡</button>
-  <button id="capture" title="Tirar foto">📸</button>
-  <button id="start" title="Gravar vídeo">🎥</button>
-  <button id="stop" title="Parar vídeo">⏹</button>
-</div>
-
-<canvas id="photoCanvas" hidden></canvas>
-<canvas id="recordCanvas" hidden></canvas>
-<div id="preview">
-  <img id="photoPreview">
-  <div><button id="savePhoto">Salvar foto</button> <button id="retry">Voltar</button></div>
-</div>
-
+<video id="video" autoplay muted playsinline></video><div id="shade"></div>
+<header><img id="logo" src="logo-hydro.png"><div><div class="name">CONECTA <b>2026</b></div><div class="sub">Gerência de Energia e Automação</div></div></header>
+<div id="tag">CONECTA 2026 • GERAL</div>
+<div id="tools"><button class="tool" id="flip">🔄</button><button class="tool" id="flash">⚡</button></div><button id="format">9:16</button>
+<div id="panel"><div id="modes"><span id="photoMode" class="active">FOTO</span><span id="videoMode">VÍDEO</span></div>
+<div class="row" id="areas"><button class="pill active" data-area="geral">GERAL</button><button class="pill" data-area="operacao">⚡ OPERAÇÃO</button><button class="pill" data-area="manutencao">🔧 MANUTENÇÃO</button><button class="pill" data-area="automacao">⚙ AUTOMAÇÃO</button></div>
+<div class="row" id="effects"><button class="pill active" data-fx="natural">NATURAL</button><button class="pill" data-fx="vivo">VIVO</button><button class="pill" data-fx="frio">FRIO</button><button class="pill" data-fx="quente">QUENTE</button><button class="pill" data-fx="pb">P&B</button></div>
+<div id="captureRow"><button class="small" id="last">▣</button><button id="shot"></button><button id="record"></button><button class="small" id="stop">■</button></div></div>
+<div id="flashScreen"></div><canvas id="canvas" hidden></canvas><canvas id="recCanvas" hidden></canvas>
+<div id="preview"><img id="previewImg"><div><button id="save">Salvar</button> <button id="close">Voltar</button></div></div>
 <script>
-const LOGO='logo-hydro.png';
-const video=document.querySelector('#video'),sel=document.querySelector('#cameraSelect'),
-statusEl=document.querySelector('#status'),flash=document.querySelector('#flash'),
-sf=document.querySelector('#screenFlash'),canvas=document.querySelector('#photoCanvas'),
-recordCanvas=document.querySelector('#recordCanvas'),prev=document.querySelector('#preview'),
-img=document.querySelector('#photoPreview'),startBtn=document.querySelector('#start'),
-stopBtn=document.querySelector('#stop'),recEl=document.querySelector('#rec');
-
-let stream=null,front=true,flashMode=false,screenMode=false,recorder=null,chunks=[],
-recording=false,recTimer=null,recStart=0;
-
-const logoImg=new Image();
-logoImg.src=LOGO;
-
-async function devices(){
-  let ds=await navigator.mediaDevices.enumerateDevices();
-  return ds.filter(x=>x.kind==='videoinput');
-}
-function hasTorch(t){
-  try{
-    let c=t.getCapabilities?.()||{};
-    return c.torch===true||(Array.isArray(c.torch)&&c.torch.includes(true));
-  }catch(e){return false}
-}
-async function open(c,audio=true){
-  if(stream)stream.getTracks().forEach(t=>t.stop());
-  stream=await navigator.mediaDevices.getUserMedia({video:c,audio});
-  video.srcObject=stream;
-  await video.play().catch(()=>{});
-  let t=stream.getVideoTracks()[0];
-  screenMode=!hasTorch(t);
-  statusEl.textContent=hasTorch(t)?'⚡ Flash físico disponível':'⚡ Flash de tela disponível';
-  return t;
-}
-async function populate(){
-  let ds=await devices(); sel.innerHTML='';
-  ds.forEach((d,i)=>{
-    let o=document.createElement('option');
-    o.value=d.deviceId;o.textContent=d.label||`Câmera ${i+1}`;sel.appendChild(o);
-  });
-  return ds;
-}
-async function boot(){
-  try{
-    await open({facingMode:'user',width:{ideal:1920},height:{ideal:1080}});
-    video.style.transform='scaleX(-1)';
-    await populate(); screenMode=true;
-  }catch(e){alert('Não foi possível abrir a câmera')}
-}
-async function findRear(){
-  front=false;video.style.transform='none';
-  let ds=await populate(),rear=ds.filter(d=>/back|rear|trase|environment/i.test(d.label));
-  if(!rear.length)rear=ds;
-  for(let d of rear){
-    try{
-      let t=await open({deviceId:{exact:d.deviceId},width:{ideal:1920},height:{ideal:1080}});
-      sel.value=d.deviceId;
-      if(hasTorch(t)){sel.style.display='block';screenMode=false;return}
-    }catch(e){}
-  }
-  try{await open({facingMode:{exact:'environment'},width:{ideal:1920},height:{ideal:1080}})}
-  catch(e){await open({facingMode:'environment'})}
-  sel.style.display='block';screenMode=true;
-}
-document.querySelector('#switch').onclick=async()=>{
-  if(recording)return;
-  if(front)await findRear();
-  else{
-    front=true;sel.style.display='none';
-    await open({facingMode:'user',width:{ideal:1920},height:{ideal:1080}});
-    video.style.transform='scaleX(-1)';screenMode=true;
-  }
-};
-sel.onchange=async()=>{
-  if(recording)return;
-  front=false;video.style.transform='none';
-  let t=await open({deviceId:{exact:sel.value},width:{ideal:1920},height:{ideal:1080}});
-  screenMode=!hasTorch(t);
-};
-flash.onclick=()=>{
-  flashMode=!flashMode;flash.classList.toggle('on',flashMode);
-  statusEl.textContent=flashMode?(screenMode?'⚡ Flash de tela ARMADO':'⚡ Flash físico ARMADO'):'Flash desligado';
-};
-
-function drawOverlay(c,w,h){
-  c.save();
-  let tg=c.createLinearGradient(0,0,0,h*.23);
-  tg.addColorStop(0,'rgba(0,0,0,.72)');tg.addColorStop(1,'rgba(0,0,0,0)');
-  c.fillStyle=tg;c.fillRect(0,0,w,h*.25);
-  let bg=c.createLinearGradient(0,h*.72,0,h);
-  bg.addColorStop(0,'rgba(0,0,0,0)');bg.addColorStop(1,'rgba(0,0,0,.78)');
-  c.fillStyle=bg;c.fillRect(0,h*.68,w,h*.32);
-
-  if(logoImg.complete && logoImg.naturalWidth){
-    let maxW=w*.22,maxH=h*.12;
-    let ratio=Math.min(maxW/logoImg.naturalWidth,maxH/logoImg.naturalHeight);
-    let lw=logoImg.naturalWidth*ratio,lh=logoImg.naturalHeight*ratio;
-    c.drawImage(logoImg,w*.035,h*.025,lw,lh);
-  }
-
-  c.shadowColor='#000';c.shadowBlur=8;c.textAlign='left';
-  c.fillStyle='#fff';c.font=`900 ${w*.058}px Arial`;c.fillText('CONECTA',w*.30,h*.075);
-  c.fillStyle='#54cf67';c.fillText('2026',w*.30,h*.13);
-  c.fillStyle='#fff';c.font=`700 ${w*.023}px Arial`;c.fillText('Gerência de Energia e Automação',w*.30,h*.165);
-  c.fillStyle='#54cf67';c.font=`800 ${w*.025}px Arial`;c.fillText('INOVAÇÃO',w*.04,h*.22);
-  c.textAlign='center';c.font=`700 ${w*.021}px Arial`;
-  c.fillText('⚡ ENERGIA     ⚙ AUTOMAÇÃO     ▣ OPERAÇÃO     🔧 MANUTENÇÃO',w/2,h*.88);
-  c.restore();
-}
-async function snap(){
-  let t=stream.getVideoTracks()[0],s=t.getSettings(),w=s.width||video.videoWidth,h=s.height||video.videoHeight;
-  canvas.width=w;canvas.height=h;let c=canvas.getContext('2d');
-  if(front){c.save();c.translate(w,0);c.scale(-1,1);c.drawImage(video,0,0,w,h);c.restore()}
-  else c.drawImage(video,0,0,w,h);
-  drawOverlay(c,w,h);
-  img.src=canvas.toDataURL('image/png');prev.style.display='flex';
-}
-async function torchSet(on){
-  let t=stream?.getVideoTracks()[0];if(!t||!hasTorch(t))return false;
-  try{await t.applyConstraints({advanced:[{torch:on}]});return true}
-  catch(e){try{await t.applyConstraints({torch:on});return true}catch(e2){return false}}
-}
-document.querySelector('#capture').onclick=async()=>{
-  if(!stream||recording)return;
-  if(flashMode&&!screenMode){
-    let ok=await torchSet(true);
-    if(ok){await new Promise(r=>setTimeout(r,220));await snap();await torchSet(false);return}
-    screenMode=true;
-  }
-  if(flashMode&&screenMode){
-    sf.classList.add('fire');await new Promise(r=>setTimeout(r,180));
-    await snap();setTimeout(()=>sf.classList.remove('fire'),90);
-  }else await snap();
-};
-document.querySelector('#savePhoto').onclick=()=>{
-  let a=document.createElement('a');a.href=img.src;a.download='conecta-2026.png';a.click();
-};
-document.querySelector('#retry').onclick=()=>prev.style.display='none';
-
-function recClock(){
-  recStart=Date.now();recEl.style.display='block';
-  recTimer=setInterval(()=>{
-    let s=Math.floor((Date.now()-recStart)/1000);
-    recEl.textContent=`🔴 REC ${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
-  },250);
-}
-function stopRecClock(){clearInterval(recTimer);recEl.style.display='none'}
-startBtn.onclick=()=>{
-  if(!stream||recording)return;
-  if(typeof MediaRecorder==='undefined'||typeof recordCanvas.captureStream!=='function'){
-    alert('Este navegador não suporta gravação de vídeo.');return;
-  }
-  let t=stream.getVideoTracks()[0],s=t.getSettings(),cw=s.width||1280,ch=s.height||720,w=720,h=Math.round(ch*(w/cw));
-  recordCanvas.width=w;recordCanvas.height=h;let c=recordCanvas.getContext('2d');
-  recording=true;chunks=[];
-  function frame(){
-    if(!recording)return;c.clearRect(0,0,w,h);
-    if(front){c.save();c.translate(w,0);c.scale(-1,1);c.drawImage(video,0,0,w,h);c.restore()}
-    else c.drawImage(video,0,0,w,h);
-    drawOverlay(c,w,h);requestAnimationFrame(frame);
-  }
-  frame();
-  let cs=recordCanvas.captureStream(24),combined=new MediaStream();
-  cs.getVideoTracks().forEach(x=>combined.addTrack(x));
-  stream.getAudioTracks().forEach(x=>combined.addTrack(x));
-  let opts={};
-  if(MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus'))opts.mimeType='video/webm;codecs=vp8,opus';
-  recorder=new MediaRecorder(combined,opts);
-  recorder.ondataavailable=e=>{if(e.data?.size)chunks.push(e.data)};
-  recorder.onstop=()=>{
-    let b=new Blob(chunks,{type:recorder.mimeType||'video/webm'}),u=URL.createObjectURL(b),a=document.createElement('a');
-    a.href=u;a.download='conecta-2026.webm';a.click();setTimeout(()=>URL.revokeObjectURL(u),3000);
-  };
-  recorder.start();startBtn.style.display='none';stopBtn.style.display='inline-block';recClock();
-};
-stopBtn.onclick=()=>{
-  if(recorder?.state==='recording')recorder.stop();
-  recording=false;stopBtn.style.display='none';startBtn.style.display='inline-block';stopRecClock();
-};
-boot();
-</script>
-</body>
-</html>
+const v=document.querySelector('#video'),tag=document.querySelector('#tag'),shot=document.querySelector('#shot'),record=document.querySelector('#record'),stopBtn=document.querySelector('#stop'),cv=document.querySelector('#canvas'),rcv=document.querySelector('#recCanvas'),pi=document.querySelector('#previewImg'),preview=document.querySelector('#preview'),logo=new Image();logo.src='logo-hydro.png';
+let stream,front=true,armed=false,area='geral',fx='natural',ratio='9:16',recording=false,mr,chunks=[];
+const labels={geral:'CONECTA 2026 • GERAL',operacao:'OPERAÇÃO DO SISTEMA ELÉTRICO',manutencao:'MANUTENÇÃO DO SISTEMA ELÉTRICO',automacao:'AUTOMAÇÃO'};
+const foot={geral:'ENERGIA  •  OPERAÇÃO  •  MANUTENÇÃO  •  AUTOMAÇÃO',operacao:'⚡ OPERAÇÃO DO SISTEMA ELÉTRICO',manutencao:'🔧 MANUTENÇÃO DO SISTEMA ELÉTRICO',automacao:'⚙ AUTOMAÇÃO'};
+const filters={natural:'none',vivo:'saturate(1.35) contrast(1.08)',frio:'saturate(.9) hue-rotate(12deg)',quente:'sepia(.2) saturate(1.18)',pb:'grayscale(1) contrast(1.12)'};
+async function openCam(f){if(stream)stream.getTracks().forEach(t=>t.stop());stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:f,width:{ideal:1920},height:{ideal:1080}},audio:true});v.srcObject=stream;front=f==='user';v.classList.toggle('mirror',front)}
+openCam('user').catch(()=>alert('Permita acesso à câmera e ao microfone.'));
+flip.onclick=()=>{if(!recording)openCam(front?'environment':'user')};flash.onclick=()=>{armed=!armed;flash.classList.toggle('on',armed)};
+document.querySelectorAll('[data-area]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-area]').forEach(x=>x.classList.remove('active'));b.classList.add('active');area=b.dataset.area;tag.textContent=labels[area]});
+document.querySelectorAll('[data-fx]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-fx]').forEach(x=>x.classList.remove('active'));b.classList.add('active');fx=b.dataset.fx;v.style.filter=filters[fx]});
+format.onclick=()=>{ratio=ratio==='9:16'?'4:5':ratio==='4:5'?'1:1':'9:16';format.textContent=ratio};
+function mode(m){photoMode.classList.toggle('active',m==='foto');videoMode.classList.toggle('active',m==='video');shot.style.display=m==='foto'?'block':'none';record.style.display=m==='video'?'block':'none'}photoMode.onclick=()=>mode('foto');videoMode.onclick=()=>mode('video');
+function dims(sw,sh){let r=ratio==='9:16'?9/16:ratio==='4:5'?4/5:1,sr=sw/sh,sx=0,sy=0,cw=sw,ch=sh;if(sr>r){cw=sh*r;sx=(sw-cw)/2}else{ch=sw/r;sy=(sh-ch)/2}return{sx,sy,cw,ch,w:Math.round(cw),h:Math.round(ch)}}
+function brand(c,w,h){let a=c.createLinearGradient(0,0,0,h*.22);a.addColorStop(0,'#000b');a.addColorStop(1,'#0000');c.fillStyle=a;c.fillRect(0,0,w,h*.25);let b=c.createLinearGradient(0,h*.7,0,h);b.addColorStop(0,'#0000');b.addColorStop(1,'#000d');c.fillStyle=b;c.fillRect(0,h*.68,w,h*.32);if(logo.complete&&logo.naturalWidth){let mw=w*.2,mh=h*.08,r=Math.min(mw/logo.naturalWidth,mh/logo.naturalHeight);c.drawImage(logo,w*.04,h*.025,logo.naturalWidth*r,logo.naturalHeight*r)}c.shadowColor='#000';c.shadowBlur=7;c.textAlign='left';c.fillStyle='#fff';c.font=`900 ${w*.052}px Arial`;c.fillText('CONECTA',w*.28,h*.065);c.fillStyle='#55cf67';c.fillText('2026',w*.28,h*.115);c.fillStyle='#fff';c.font=`700 ${w*.021}px Arial`;c.fillText('Gerência de Energia e Automação',w*.28,h*.15);c.fillStyle='#55cf67';c.font=`800 ${w*.024}px Arial`;c.fillText(labels[area],w*.04,h*.205);c.textAlign='center';c.fillStyle='#fff';c.font=`800 ${w*.021}px Arial`;c.fillText(foot[area],w/2,h*.9)}
+function draw(c,w,h){let d=dims(v.videoWidth,v.videoHeight);c.save();c.filter=filters[fx];if(front){c.translate(w,0);c.scale(-1,1)}c.drawImage(v,d.sx,d.sy,d.cw,d.ch,0,0,w,h);c.restore();brand(c,w,h)}
+shot.onclick=async()=>{let d=dims(v.videoWidth,v.videoHeight);cv.width=d.w;cv.height=d.h;if(armed){flashScreen.classList.add('fire');await new Promise(r=>setTimeout(r,120))}draw(cv.getContext('2d'),cv.width,cv.height);flashScreen.classList.remove('fire');pi.src=cv.toDataURL('image/png');preview.style.display='flex'};
+close.onclick=()=>preview.style.display='none';save.onclick=()=>{let a=document.createElement('a');a.href=pi.src;a.download=`conecta-2026-${area}.png`;a.click()};last.onclick=()=>{if(pi.src)preview.style.display='flex'};
+record.onclick=()=>{if(!rcv.captureStream||!window.MediaRecorder)return alert('Vídeo não suportado neste navegador.');let d=dims(v.videoWidth,v.videoHeight),w=Math.min(720,d.w),h=Math.round(w*d.h/d.w);rcv.width=w;rcv.height=h;let c=rcv.getContext('2d');recording=true;chunks=[];function loop(){if(!recording)return;draw(c,w,h);requestAnimationFrame(loop)}loop();let cs=rcv.captureStream(24),mix=new MediaStream();cs.getVideoTracks().forEach(t=>mix.addTrack(t));stream.getAudioTracks().forEach(t=>mix.addTrack(t));mr=new MediaRecorder(mix);mr.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};mr.onstop=()=>{let u=URL.createObjectURL(new Blob(chunks,{type:mr.mimeType})),a=document.createElement('a');a.href=u;a.download=`conecta-2026-${area}.webm`;a.click()};mr.start();record.style.display='none';stopBtn.style.display='block'};
+stopBtn.onclick=()=>{recording=false;if(mr?.state==='recording')mr.stop();stopBtn.style.display='none';record.style.display='block'};
+</script></body></html>
