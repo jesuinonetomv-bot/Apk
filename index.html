@@ -2,29 +2,48 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050705"><title>Conecta 2026 • Câmera Teste</title>
+<meta name="theme-color" content="#444D55"><title>Conecta 2026 • Câmera Teste</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;font-family:Arial,sans-serif;color:#fff}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#1f252a;font-family:Arial,sans-serif;color:#fff}
 video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover}.mirror{transform:scaleX(-1)}
 #shade{position:fixed;inset:0;pointer-events:none;background:linear-gradient(#0009,transparent 25%,transparent 60%,#000e)}
 header{position:fixed;z-index:5;top:14px;left:14px;right:14px;display:flex;align-items:center;gap:10px}
-#logo{width:72px;height:50px;object-fit:contain}.name{font-size:25px;font-weight:900}.name b{color:#55cf67}.sub{font-size:10px;font-weight:700}
-#tag{position:fixed;z-index:5;top:83px;left:14px;border-left:3px solid #55cf67;background:#0008;padding:7px 10px;font-size:12px;font-weight:900}
-#tools{position:fixed;z-index:10;right:12px;top:14px;display:flex;gap:7px}.tool{width:42px;height:42px;border:0;border-radius:50%;background:#000a;color:#fff;font-size:19px}.tool.on{background:#55cf67;color:#071009}
+#logo{width:72px;height:50px;object-fit:contain}.name{font-size:25px;font-weight:900}.name b{color:#43807A}.sub{font-size:10px;font-weight:700}
+#tag{position:fixed;z-index:5;top:83px;left:14px;border-left:3px solid #43807A;background:#0008;padding:7px 10px;font-size:12px;font-weight:900}
+#tools{position:fixed;z-index:10;right:12px;top:14px;display:flex;gap:7px}.tool{width:42px;height:42px;border:0;border-radius:50%;background:#000a;color:#fff;font-size:19px}.tool.on{background:#43807A;color:#fff}
 #format{position:fixed;z-index:10;right:14px;top:64px;border:1px solid #ffffff55;background:#000a;color:#fff;border-radius:18px;padding:6px 10px}
 #panel{position:fixed;z-index:10;bottom:10px;left:0;right:0}.row{display:flex;gap:7px;overflow-x:auto;padding:4px 12px;scrollbar-width:none}.row::-webkit-scrollbar{display:none}
-.pill{white-space:nowrap;border:1px solid #ffffff45;background:#080a08cc;color:#fff;border-radius:20px;padding:8px 11px;font-size:10px;font-weight:800}.pill.active{border-color:#55cf67;color:#8cff9b;background:#18351ddd}
-#modes{text-align:center;font-size:11px;font-weight:800;margin:4px}#modes span{padding:5px 9px}#modes .active{color:#55cf67}
-#captureRow{height:76px;display:flex;justify-content:center;align-items:center;gap:25px}.small{width:48px;height:48px;border-radius:50%;border:1px solid #ffffff66;background:#090b09dd;color:#fff;font-size:20px}
-#shot,#record{width:67px;height:67px;border-radius:50%;border:5px solid #fff;box-shadow:0 0 0 3px #55cf67}#shot{background:transparent}#record{display:none;background:#d72e2e}#stop{display:none;background:#9b1d1d}
+.pill{white-space:nowrap;border:1px solid #ffffff45;background:rgba(68,77,85,.86);color:#fff;border-radius:20px;padding:8px 11px;font-size:10px;font-weight:800}.pill.active{border-color:#43807A;color:#fff;background:rgba(67,128,122,.72)}
+#modes{text-align:center;font-size:11px;font-weight:800;margin:4px}#modes span{padding:5px 9px}#modes .active{color:#43807A}
+#captureRow{height:76px;display:flex;justify-content:center;align-items:center;gap:25px}.small{width:48px;height:48px;border-radius:50%;border:1px solid #ffffff66;background:rgba(74,48,65,.86);color:#fff;font-size:20px}
+#shot,#record{width:67px;height:67px;border-radius:50%;border:5px solid #fff;box-shadow:0 0 0 3px #43807A}#shot{background:transparent}#record{display:none;background:#d72e2e}#stop{display:none;background:#B95946}
 #flashScreen{position:fixed;z-index:30;inset:0;background:#fff;opacity:0;pointer-events:none}#flashScreen.fire{opacity:1}
-#preview{display:none;position:fixed;z-index:40;inset:0;background:#050705;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:15px}#preview img{max-width:94vw;max-height:78vh;border-radius:12px}
-#preview button{position:relative;z-index:50;border:1px solid #55cf67;background:#111;color:#fff;border-radius:20px;padding:12px 18px;font-weight:700;touch-action:manipulation}
+#preview{display:none;position:fixed;z-index:40;inset:0;background:#444D55;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:15px}#preview img{max-width:94vw;max-height:78vh;border-radius:12px}
+#preview button{position:relative;z-index:50;border:1px solid #43807A;background:#4A3041;color:#fff;border-radius:20px;padding:12px 18px;font-weight:700;touch-action:manipulation}
+
+/* Moldura temática por área */
+#themeFrame{position:fixed;z-index:6;left:8px;right:8px;top:122px;bottom:238px;pointer-events:none}
+.themeIcon{position:absolute;font-size:clamp(22px,6vw,34px);filter:drop-shadow(0 2px 5px rgba(0,0,0,.55));opacity:.96}
+.themeIcon.tl1{left:8px;top:10px}.themeIcon.tl2{left:8px;top:30%}.themeIcon.bl1{left:8px;bottom:28%}.themeIcon.bl2{left:8px;bottom:8px}
+.themeIcon.tr1{right:8px;top:10px}.themeIcon.tr2{right:8px;top:30%}.themeIcon.br1{right:8px;bottom:28%}.themeIcon.br2{right:8px;bottom:8px}
+.themeLine{position:absolute;background:linear-gradient(180deg,var(--c4),var(--c2),var(--c7));opacity:.65;border-radius:999px}
+.themeLine.left{left:1px;top:52px;bottom:52px;width:3px}.themeLine.right{right:1px;top:52px;bottom:52px;width:3px}
+.themeTop,.themeBottom{position:absolute;left:52px;right:52px;height:2px;background:linear-gradient(90deg,var(--c5),var(--c4),var(--c7));opacity:.55}
+.themeTop{top:1px}.themeBottom{bottom:1px}
 </style></head>
 <body>
 <video id="video" autoplay muted playsinline></video><div id="shade"></div>
 <header><img id="logo" src="logo-hydro.png"><div><div class="name">CONECTA <b>2026</b></div><div class="sub">Gerência de Energia e Automação</div></div></header>
 <div id="tag">CONECTA 2026 • GERAL</div>
+<div id="themeFrame">
+  <div class="themeTop"></div><div class="themeBottom"></div>
+  <div class="themeLine left"></div><div class="themeLine right"></div>
+  <span class="themeIcon tl1"></span><span class="themeIcon tl2"></span>
+  <span class="themeIcon bl1"></span><span class="themeIcon bl2"></span>
+  <span class="themeIcon tr1"></span><span class="themeIcon tr2"></span>
+  <span class="themeIcon br1"></span><span class="themeIcon br2"></span>
+</div>
+
 <div id="tools"><button class="tool" id="flip">🔄</button><button class="tool" id="flash">⚡</button></div><button id="format">9:16</button>
 <div id="panel"><div id="modes"><span id="photoMode" class="active">FOTO</span><span id="videoMode">VÍDEO</span></div>
 <div class="row" id="areas"><button class="pill active" data-area="geral">GERAL</button><button class="pill" data-area="operacao">⚡ OPERAÇÃO</button><button class="pill" data-area="manutencao">🔧 MANUTENÇÃO</button><button class="pill" data-area="automacao">⚙ AUTOMAÇÃO</button></div>
@@ -73,6 +92,28 @@ const labels = {
   automacao: 'AUTOMAÇÃO'
 };
 
+const themes = {
+  geral: ['⚡','🖥️','🔧','⚙️','🤖','💻','📡','🛠️'],
+  operacao: ['🖥️','🖥️','📊','⚡','🛰️','🎛️','🔌','📟'],
+  manutencao: ['🔧','🛠️','⚙️','🧰','🔩','🔌','🪛','🧲'],
+  automacao: ['🤖','🦾','💻','⌨️','🧠','📡','⚙️','</>']
+};
+
+const areaColors = {
+  geral: '#43807A',
+  operacao: '#768692',
+  manutencao: '#B95946',
+  automacao: '#4A3041'
+};
+
+function applyTheme(){
+  document.documentElement.style.setProperty('--accent', areaColors[area]);
+  const els=[...document.querySelectorAll('#themeFrame .themeIcon')];
+  themes[area].forEach((ic,i)=>{ if(els[i]) els[i].textContent=ic; });
+  const accent=areaColors[area];
+  document.querySelectorAll('.pill.active').forEach(x=>x.style.borderColor=accent);
+}
+
 const filters = {
   natural: 'none',
   vivo: 'saturate(1.35) contrast(1.08)',
@@ -104,6 +145,7 @@ async function openCam(facing) {
 }
 
 openCam('user').catch(() => alert('Permita acesso à câmera e ao microfone.'));
+applyTheme();
 
 flipBtn.addEventListener('click', async () => {
   if (recording) return;
@@ -125,6 +167,7 @@ document.querySelectorAll('[data-area]').forEach(btn => {
     btn.classList.add('active');
     area = btn.dataset.area;
     tag.textContent = labels[area];
+    applyTheme();
   });
 });
 
@@ -230,6 +273,22 @@ function drawOverlayExactly(ctx, w, h) {
   ctx.fillStyle = bottom;
   ctx.fillRect(0, h * .58, w, h * .42);
 
+  // Moldura temática também gravada na foto/vídeo
+  const icons = themes[area];
+  const accent = areaColors[area];
+  ctx.save();
+  ctx.globalAlpha = .95;
+  ctx.strokeStyle = accent;
+  ctx.lineWidth = Math.max(2, 2*s);
+  ctx.strokeRect(8*s, 118*s, w-16*s, h-230*s);
+  ctx.font = `${30*s}px Arial`;
+  ctx.textAlign='center';
+  const L=22*s, R=w-22*s;
+  const y1=155*s, y2=h*.35, y3=h*.60, y4=h-155*s;
+  const ys=[y1,y2,y3,y4];
+  for(let i=0;i<4;i++){ctx.fillText(icons[i],L,ys[i]);ctx.fillText(icons[i+4],R,ys[i]);}
+  ctx.restore();
+
   // Logo
   const left = 14 * sx;
   const topY = 14 * sy;
@@ -252,7 +311,7 @@ function drawOverlayExactly(ctx, w, h) {
   ctx.fillStyle = '#fff';
   ctx.fillText('CONECTA', titleX, topY + 23*s);
   const conectaWidth = ctx.measureText('CONECTA ').width;
-  ctx.fillStyle = '#55cf67';
+  ctx.fillStyle = areaColors[area];
   ctx.fillText('2026', titleX + conectaWidth, topY + 23*s);
 
   ctx.fillStyle = '#fff';
@@ -271,7 +330,7 @@ function drawOverlayExactly(ctx, w, h) {
   roundedRect(ctx, tagX, tagY, textW + tagPadX*2 + 4*s, 28*s, 3*s);
   ctx.fill();
 
-  ctx.fillStyle = '#55cf67';
+  ctx.fillStyle = areaColors[area];
   ctx.fillRect(tagX, tagY, 3*s, 28*s);
 
   ctx.fillStyle = '#fff';
