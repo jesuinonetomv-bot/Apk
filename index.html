@@ -1,440 +1,195 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#050705"><title>Conecta 2026 • Câmera Teste</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#444D55">
+<title>Conecta 2026</title>
 <style>
 :root{--slate:#444D55;--steel:#768692;--gray:#8C8C8C;--teal:#43807A;--sand:#C5B9AC;--wine:#4A3041;--rust:#B95946}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111;font-family:Arial,sans-serif;color:#fff}
-#stage{position:fixed;inset:0;background:#111;overflow:hidden}
+#app{position:fixed;inset:0;overflow:hidden;background:#111}
 #video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.mirror{transform:scaleX(-1)}
-#fx{position:absolute;inset:0;pointer-events:none}
-#brand{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(20,24,26,.58) 0%,transparent 22%,transparent 56%,rgba(15,18,19,.80) 79%,rgba(12,14,15,.96) 100%)}
-.topShade,.bottomShade,.frame{display:none}
-.top{position:absolute;top:max(18px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:min(78vw,390px);display:flex;align-items:center;justify-content:center;gap:13px}
-.logo{width:92px!important;height:60px!important;object-fit:contain!important;filter:drop-shadow(0 2px 5px #000)}
-.headline{border-left:2px solid rgba(255,255,255,.75);padding-left:13px!important}
-.headline .main{font-size:clamp(23px,7vw,35px)!important;line-height:.9!important;letter-spacing:.5px!important}.headline .main span{display:block;color:var(--teal)!important}
-.headline .dept{font-size:clamp(9px,2.5vw,12px)!important;line-height:1.1;margin-top:5px!important}
-.innovation{display:none}
-.areaTag{position:absolute!important;top:auto!important;left:0!important;right:0!important;bottom:31%!important;text-align:center;background:none!important;border:0!important;padding:0 20px!important;font-size:clamp(24px,7vw,38px)!important;letter-spacing:5px!important;color:var(--teal);text-shadow:0 3px 8px #000;font-weight:800!important}
-.areaTag::after{content:"Na Alunorte nós inovamos";display:block;color:var(--sand);font-size:clamp(14px,4vw,20px);letter-spacing:0;font-weight:500;margin-top:13px}
-#themeFrame{position:absolute;inset:0;pointer-events:none}
-.themeIcon{position:absolute;font-size:clamp(25px,7vw,38px);filter:drop-shadow(0 3px 5px #000);opacity:.82}
-.themeIcon:nth-child(1){left:5%;top:18%}.themeIcon:nth-child(2){right:5%;top:20%}.themeIcon:nth-child(3){left:5%;top:36%}.themeIcon:nth-child(4){right:5%;top:39%}.themeIcon:nth-child(5){left:5%;top:54%}.themeIcon:nth-child(6){right:5%;top:56%}.themeIcon:nth-child(7){left:5%;top:69%}.themeIcon:nth-child(8){right:5%;top:70%}
-#topActions{position:absolute;z-index:12;top:max(16px,env(safe-area-inset-top));left:12px;right:12px;display:flex;justify-content:space-between}
-.iconBtn{width:43px;height:43px;border:0;background:transparent;color:#fff;font-size:25px;text-shadow:0 2px 5px #000}.iconBtn.on{color:var(--rust)}
-#format{position:absolute;z-index:13;left:50%;transform:translateX(-50%);right:auto!important;top:auto!important;bottom:15.5%;width:min(62vw,300px);height:42px;background:rgba(20,24,26,.82);border:1px solid rgba(255,255,255,.15);border-radius:15px;color:#fff;font-size:0}
-#format::after{content:"9:16   STORY      4:5   POST      1:1   QUADRADO";font-size:10px;word-spacing:4px}
-.panel{position:absolute;z-index:15;left:0;right:0;bottom:max(4px,env(safe-area-inset-bottom));height:29%}
-.mode{position:absolute;left:17%;bottom:4%;font-size:11px!important;letter-spacing:0!important}.mode span{padding:6px!important}.mode .active{color:var(--teal)!important}
-.areas{position:absolute;left:0;right:0;top:0;display:flex!important;justify-content:center;gap:3px!important;padding:0 5px!important;overflow:visible!important}
-.areas .pill{border:0!important;background:transparent!important;border-radius:0!important;padding:7px 7px!important;font-size:clamp(9px,2.5vw,12px)!important;color:var(--gray)}
-.areas .pill.active{color:var(--teal)!important;border-bottom:2px solid var(--teal)!important}
-.effects{position:absolute;right:2%;bottom:1%;left:51%;padding:0!important;display:flex!important;gap:5px!important;overflow-x:auto!important}
-.effects .pill{min-width:48px;height:58px;border:2px solid transparent!important;border-radius:12px!important;padding:34px 3px 2px!important;background:linear-gradient(135deg,var(--steel),var(--teal))!important;font-size:8px!important;color:#fff!important}
-.effects .pill:nth-child(2){background:linear-gradient(135deg,var(--teal),var(--sand))!important}
-.effects .pill:nth-child(3){background:linear-gradient(135deg,var(--steel),var(--gray))!important}
-.effects .pill:nth-child(4){background:linear-gradient(135deg,var(--rust),var(--sand))!important}
-.effects .pill:nth-child(5){background:linear-gradient(135deg,#333,#aaa)!important}
-.effects .pill.active{border-color:var(--teal)!important}
-.captureRow{position:absolute;left:0;right:0;bottom:0;height:76px!important;display:flex!important;justify-content:center!important;align-items:center!important;gap:25px!important}
-.small{width:50px!important;height:50px!important;border-radius:12px!important;border:2px solid #fff!important;background:rgba(68,77,85,.82)!important;color:#fff!important}
-#shot,#record{width:70px!important;height:70px!important;border-radius:50%!important;border:5px solid #fff!important;box-shadow:0 0 0 2px rgba(255,255,255,.7)!important}
-#shot{background:#fff!important}#record{background:var(--rust)!important}
-#stop{display:none;background:var(--rust)!important}
-#screenFlash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:100}#screenFlash.fire{opacity:1}
-#status,#rec{display:none!important}
-#preview{display:none;position:fixed;inset:0;z-index:40;background:#15191b;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:15px}
-#preview img{max-width:94vw;max-height:78vh;border-radius:12px}
-#preview button{position:relative;z-index:50;border:1px solid var(--teal);background:var(--slate);color:#fff;border-radius:20px;padding:12px 18px;font-weight:700;touch-action:manipulation}
-</style></head>
+#overlay{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(20,24,26,.62) 0%,transparent 22%,transparent 55%,rgba(15,18,19,.83) 79%,rgba(12,14,15,.97) 100%)}
+#header{position:absolute;top:max(17px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:min(78vw,390px);display:flex;justify-content:center;align-items:center;gap:13px}
+#logo{width:88px;height:58px;object-fit:contain;filter:drop-shadow(0 2px 5px #000)}
+#brandText{border-left:2px solid rgba(255,255,255,.8);padding-left:13px}
+#title{font-weight:900;font-size:clamp(24px,7vw,35px);line-height:.87;text-shadow:0 2px 5px #000}
+#title span{display:block;color:var(--teal)}
+#dept{font-size:clamp(9px,2.5vw,12px);font-weight:700;line-height:1.1;margin-top:6px;text-shadow:0 2px 4px #000}
+#areaTitle{position:absolute;left:10px;right:10px;bottom:31%;text-align:center;color:var(--teal);font-size:clamp(24px,7vw,38px);letter-spacing:4px;font-weight:800;text-shadow:0 3px 8px #000}
+#tagline{display:block;margin-top:12px;color:var(--sand);font-size:clamp(14px,4vw,20px);letter-spacing:0;font-weight:500}
+.themeIcon{position:absolute;font-size:clamp(24px,6.5vw,36px);filter:drop-shadow(0 3px 5px #000);opacity:.85}
+.i1{left:5%;top:18%}.i2{right:5%;top:19%}.i3{left:5%;top:36%}.i4{right:5%;top:38%}
+.i5{left:5%;top:53%}.i6{right:5%;top:54%}.i7{left:5%;top:68%}.i8{right:5%;top:68%}
+#topTools{position:absolute;z-index:10;top:max(15px,env(safe-area-inset-top));left:10px;right:10px;display:flex;justify-content:space-between}
+.tool{width:44px;height:44px;border:0;background:transparent;color:#fff;font-size:26px;text-shadow:0 2px 5px #000}.tool.on{color:var(--rust)}
+#controls{position:absolute;z-index:11;left:0;right:0;bottom:max(4px,env(safe-area-inset-bottom));height:29%}
+#areas{display:flex;justify-content:center;gap:2px;padding:0 5px}
+.areaBtn{border:0;background:transparent;color:var(--gray);font-weight:800;font-size:clamp(9px,2.4vw,12px);padding:7px 6px;border-bottom:2px solid transparent}
+.areaBtn.active{color:var(--teal);border-bottom-color:var(--teal)}
+#formatBar{margin:8px auto 6px;width:min(66vw,310px);display:grid;grid-template-columns:repeat(3,1fr);background:rgba(20,24,26,.82);border:1px solid rgba(255,255,255,.14);border-radius:15px;overflow:hidden}
+.formatBtn{border:0;background:transparent;color:#ddd;padding:6px 2px;font-size:11px}.formatBtn b{display:block;font-size:14px}.formatBtn.active{background:rgba(118,134,146,.38);box-shadow:inset 0 0 0 2px rgba(197,185,172,.26)}
+#bottomRow{position:absolute;left:0;right:0;bottom:0;height:90px;display:flex;align-items:center;justify-content:center}
+#modes{position:absolute;left:10%;bottom:18px;font-size:11px}.mode{margin:0 5px;color:var(--gray);font-weight:800}.mode.active{color:var(--teal)}
+#shot,#record,#stop{width:70px;height:70px;border-radius:50%;border:5px solid #fff;box-shadow:0 0 0 2px rgba(255,255,255,.7)}
+#shot{background:#fff}#record{display:none;background:var(--rust)}#stop{display:none;background:var(--rust);color:#fff;font-size:22px}
+#effects{position:absolute;right:2%;left:51%;bottom:9px;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none}#effects::-webkit-scrollbar{display:none}
+.effect{flex:0 0 49px;height:59px;border:2px solid transparent;border-radius:12px;padding:36px 2px 2px;background:linear-gradient(135deg,var(--steel),var(--teal));color:#fff;font-size:8px}
+.effect:nth-child(2){background:linear-gradient(135deg,var(--teal),var(--sand))}.effect:nth-child(3){background:linear-gradient(135deg,var(--steel),var(--gray))}
+.effect:nth-child(4){background:linear-gradient(135deg,var(--rust),var(--sand))}.effect:nth-child(5){background:linear-gradient(135deg,#333,#aaa)}
+.effect.active{border-color:var(--teal)}
+#flashScreen{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:30}#flashScreen.fire{opacity:1}
+#preview{display:none;position:fixed;inset:0;z-index:40;background:#15191b;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:14px}
+#previewImg{max-width:94vw;max-height:78vh;border-radius:12px}
+.previewBtns{display:flex;gap:8px}.previewBtns button{border:1px solid var(--teal);background:var(--slate);color:#fff;border-radius:20px;padding:12px 18px;font-weight:700}
+</style>
+</head>
 <body>
-<video id="video" autoplay muted playsinline></video><div id="shade"></div>
-<header><img id="logo" src="logo-hydro.png"><div><div class="name">CONECTA <b>2026</b></div><div class="sub">Gerência de Energia e Automação</div></div></header>
-<div id="tag">CONECTA 2026 • GERAL</div>
-<div id="tools"><button class="tool" id="flip">🔄</button><button class="tool" id="flash">⚡</button></div><button id="format" data-current="9:16">9:16</button>
-<div id="panel"><div id="modes"><span id="photoMode" class="active">FOTO</span><span id="videoMode">VÍDEO</span></div>
-<div class="row" id="areas"><button class="pill active" data-area="geral">GERAL</button><button class="pill" data-area="operacao">⚡ OPERAÇÃO</button><button class="pill" data-area="manutencao">🔧 MANUTENÇÃO</button><button class="pill" data-area="automacao">⚙ AUTOMAÇÃO</button></div>
-<div class="row" id="effects"><button class="pill active" data-fx="natural">NATURAL</button><button class="pill" data-fx="vivo">VIVO</button><button class="pill" data-fx="frio">FRIO</button><button class="pill" data-fx="quente">QUENTE</button><button class="pill" data-fx="pb">P&B</button></div>
-<div id="captureRow"><button class="small" id="last">▣</button><button id="shot"></button><button id="record"></button><button class="small" id="stop">■</button></div></div>
-<div id="flashScreen"></div><canvas id="canvas" hidden></canvas><canvas id="recCanvas" hidden></canvas>
-<div id="preview"><img id="previewImg"><div><button id="save">Salvar</button> <button id="close">Voltar</button></div></div>
+<div id="app">
+  <video id="video" autoplay muted playsinline></video>
+  <div id="overlay">
+    <div id="header">
+      <img id="logo" src="logo-hydro.png" alt="Hydro">
+      <div id="brandText">
+        <div id="title">CONECTA <span>2026</span></div>
+        <div id="dept">GERÊNCIA DE ENERGIA<br>E AUTOMAÇÃO</div>
+      </div>
+    </div>
+    <div id="areaTitle">CONECTA<span id="tagline">Na Alunorte nós inovamos</span></div>
+    <span class="themeIcon i1"></span><span class="themeIcon i2"></span><span class="themeIcon i3"></span><span class="themeIcon i4"></span>
+    <span class="themeIcon i5"></span><span class="themeIcon i6"></span><span class="themeIcon i7"></span><span class="themeIcon i8"></span>
+  </div>
+
+  <div id="topTools">
+    <button class="tool" id="flip">⚙️</button>
+    <button class="tool" id="flash">⚡</button>
+  </div>
+
+  <div id="controls">
+    <div id="areas">
+      <button class="areaBtn active" data-area="geral">GERAL</button>
+      <button class="areaBtn" data-area="operacao">OPERAÇÃO</button>
+      <button class="areaBtn" data-area="manutencao">MANUTENÇÃO</button>
+      <button class="areaBtn" data-area="automacao">AUTOMAÇÃO</button>
+    </div>
+
+    <div id="formatBar">
+      <button class="formatBtn active" data-ratio="9:16"><b>9:16</b>STORY</button>
+      <button class="formatBtn" data-ratio="4:5"><b>4:5</b>POST</button>
+      <button class="formatBtn" data-ratio="1:1"><b>1:1</b>QUADRADO</button>
+    </div>
+
+    <div id="bottomRow">
+      <div id="modes"><span id="photoMode" class="mode active">FOTO</span><span id="videoMode" class="mode">VÍDEO</span></div>
+      <button id="shot"></button><button id="record"></button><button id="stop">■</button>
+      <div id="effects">
+        <button class="effect active" data-fx="natural">NATURAL</button>
+        <button class="effect" data-fx="vivo">VIVO</button>
+        <button class="effect" data-fx="frio">FRIO</button>
+        <button class="effect" data-fx="quente">QUENTE</button>
+        <button class="effect" data-fx="pb">P&B</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="flashScreen"></div>
+<canvas id="canvas" hidden></canvas>
+<canvas id="recCanvas" hidden></canvas>
+<div id="preview"><img id="previewImg"><div class="previewBtns"><button id="save">Salvar</button><button id="close">Voltar</button></div></div>
+
 <script>
-const $ = (s) => document.querySelector(s);
-const video = $('#video');
-const tag = $('#tag');
-const shot = $('#shot');
-const recordBtn = $('#record');
-const stopBtn = $('#stop');
-const canvas = $('#canvas');
-const recCanvas = $('#recCanvas');
-const previewImg = $('#previewImg');
-const preview = $('#preview');
-const flashScreen = $('#flashScreen');
-const flipBtn = $('#flip');
-const flashBtn = $('#flash');
-const formatBtn = $('#format');
-const photoMode = $('#photoMode');
-const videoMode = $('#videoMode');
-const saveBtn = $('#save');
-const closeBtn = $('#close');
-const lastBtn = $('#last');
+const $=s=>document.querySelector(s);
+const video=$('#video'),flashBtn=$('#flash'),flipBtn=$('#flip'),shot=$('#shot'),recordBtn=$('#record'),stopBtn=$('#stop');
+const canvas=$('#canvas'),recCanvas=$('#recCanvas'),preview=$('#preview'),previewImg=$('#previewImg'),flashScreen=$('#flashScreen');
+const areaTitle=$('#areaTitle'),photoMode=$('#photoMode'),videoMode=$('#videoMode'),logoImg=new Image();logoImg.src='logo-hydro.png';
 
-const logo = new Image();
-logo.src = 'logo-hydro.png';
+let stream=null,front=true,flashArmed=false,area='geral',effect='natural',ratio='9:16',recording=false,mediaRecorder=null,chunks=[];
 
-let stream = null;
-let front = true;
-let flashArmed = false;
-let area = 'geral';
-let effect = 'natural';
-let ratio = '9:16';
-let recording = false;
-let mediaRecorder = null;
-let chunks = [];
-
-const labels = {
-  geral: 'CONECTA',
-  operacao: 'OPERAÇÃO DO SISTEMA ELÉTRICO',
-  manutencao: 'MANUTENÇÃO DO SISTEMA ELÉTRICO',
-  automacao: 'AUTOMAÇÃO'
-};
-const themeIcons={
+const labels={geral:'CONECTA',operacao:'OPERAÇÃO DO SISTEMA ELÉTRICO',manutencao:'MANUTENÇÃO DO SISTEMA ELÉTRICO',automacao:'AUTOMAÇÃO'};
+const colors={geral:'#43807A',operacao:'#43807A',manutencao:'#B95946',automacao:'#4A3041'};
+const themes={
   geral:['⚡','🖥️','🔧','⚙️','🤖','💻','📡','🛠️'],
   operacao:['⚡','🖥️','📊','🎛️','📟','🔌','🛰️','🛡️'],
   manutencao:['🔧','🛠️','⚙️','🧰','🔩','🪛','📏','🔌'],
   automacao:['🤖','🦾','💻','⌨️','📡','⚙️','🧠','💾']
 };
-function refreshIcons(){
-  const icons=document.querySelectorAll('#themeFrame .themeIcon');
-  (themeIcons[area]||themeIcons.geral).forEach((x,i)=>{if(icons[i])icons[i].textContent=x});
+const filters={natural:'none',vivo:'saturate(1.35) contrast(1.08)',frio:'saturate(.9) hue-rotate(12deg)',quente:'sepia(.2) saturate(1.18)',pb:'grayscale(1) contrast(1.12)'};
+
+function refreshTheme(){
+  areaTitle.firstChild.nodeValue=labels[area];
+  areaTitle.style.color=colors[area];
+  document.querySelectorAll('.themeIcon').forEach((e,i)=>e.textContent=themes[area][i]);
+}
+refreshTheme();
+
+async function openCam(facing){
+  if(stream)stream.getTracks().forEach(t=>t.stop());
+  stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:facing,width:{ideal:1920},height:{ideal:1080}},audio:true});
+  video.srcObject=stream;await video.play();front=facing==='user';video.classList.toggle('mirror',front);
+}
+openCam('user').catch(()=>alert('Permita acesso à câmera e ao microfone.'));
+
+flipBtn.onclick=()=>{if(!recording)openCam(front?'environment':'user').catch(()=>alert('Não foi possível trocar a câmera.'))};
+flashBtn.onclick=()=>{flashArmed=!flashArmed;flashBtn.classList.toggle('on',flashArmed)};
+
+document.querySelectorAll('.areaBtn').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.areaBtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');area=b.dataset.area;refreshTheme()
+});
+document.querySelectorAll('.effect').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.effect').forEach(x=>x.classList.remove('active'));b.classList.add('active');effect=b.dataset.fx;video.style.filter=filters[effect]
+});
+document.querySelectorAll('.formatBtn').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.formatBtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');ratio=b.dataset.ratio
+});
+photoMode.onclick=()=>{photoMode.classList.add('active');videoMode.classList.remove('active');shot.style.display='block';recordBtn.style.display='none';stopBtn.style.display='none'};
+videoMode.onclick=()=>{videoMode.classList.add('active');photoMode.classList.remove('active');shot.style.display='none';recordBtn.style.display='block'};
+
+function outSize(){return ratio==='9:16'?{w:1080,h:1920}:ratio==='4:5'?{w:1080,h:1350}:{w:1080,h:1080}}
+function cover(sw,sh,w,h){let sr=sw/sh,br=w/h;if(sr>br){let cw=sh*br;return{sx:(sw-cw)/2,sy:0,sw:cw,sh}}else{let ch=sw/br;return{sx:0,sy:(sh-ch)/2,sw,sh:ch}}}
+function draw(ctx,w,h){
+  let d=cover(video.videoWidth,video.videoHeight,w,h);ctx.save();ctx.filter=filters[effect];
+  if(front){ctx.translate(w,0);ctx.scale(-1,1)}
+  ctx.drawImage(video,d.sx,d.sy,d.sw,d.sh,0,0,w,h);ctx.restore();
+
+  let tg=ctx.createLinearGradient(0,0,0,h*.23);tg.addColorStop(0,'rgba(20,24,26,.7)');tg.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=tg;ctx.fillRect(0,0,w,h*.27);
+  let bg=ctx.createLinearGradient(0,h*.58,0,h);bg.addColorStop(0,'rgba(0,0,0,0)');bg.addColorStop(1,'rgba(12,14,15,.93)');ctx.fillStyle=bg;ctx.fillRect(0,h*.55,w,h*.45);
+
+  if(logoImg.complete&&logoImg.naturalWidth){let mw=w*.2,mh=h*.07,r=Math.min(mw/logoImg.naturalWidth,mh/logoImg.naturalHeight);ctx.drawImage(logoImg,w*.27,h*.025,logoImg.naturalWidth*r,logoImg.naturalHeight*r)}
+  ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=w*.002;ctx.beginPath();ctx.moveTo(w*.49,h*.025);ctx.lineTo(w*.49,h*.12);ctx.stroke();
+  ctx.textAlign='left';ctx.fillStyle='#fff';ctx.font=`900 ${w*.05}px Arial`;ctx.fillText('CONECTA',w*.52,h*.06);ctx.fillStyle='#43807A';ctx.fillText('2026',w*.52,h*.105);
+  ctx.fillStyle='#fff';ctx.font=`700 ${w*.018}px Arial`;ctx.fillText('GERÊNCIA DE ENERGIA',w*.52,h*.135);ctx.fillText('E AUTOMAÇÃO',w*.52,h*.16);
+
+  ctx.textAlign='center';ctx.fillStyle=colors[area];ctx.font=`800 ${w*.055}px Arial`;ctx.fillText(labels[area],w/2,h*.72);
+  ctx.fillStyle='#C5B9AC';ctx.font=`500 ${w*.028}px Arial`;ctx.fillText('Na Alunorte nós inovamos',w/2,h*.77);
+
+  ctx.font=`${w*.035}px Arial`;let ys=[h*.22,h*.38,h*.54,h*.66];
+  themes[area].slice(0,4).forEach((ic,i)=>ctx.fillText(ic,w*.07,ys[i]));
+  themes[area].slice(4).forEach((ic,i)=>ctx.fillText(ic,w*.93,ys[i]));
 }
 
-const filters = {
-  natural: 'none',
-  vivo: 'saturate(1.35) contrast(1.08)',
-  frio: 'saturate(.90) contrast(1.04) hue-rotate(12deg)',
-  quente: 'sepia(.20) saturate(1.18) contrast(1.03)',
-  pb: 'grayscale(1) contrast(1.12)'
+shot.onclick=async()=>{
+  if(!video.videoWidth)return;
+  if(flashArmed){flashScreen.classList.add('fire');await new Promise(r=>setTimeout(r,120))}
+  let s=outSize();canvas.width=s.w;canvas.height=s.h;draw(canvas.getContext('2d'),s.w,s.h);flashScreen.classList.remove('fire');
+  previewImg.src=canvas.toDataURL('image/png');preview.style.display='flex'
 };
+$('#close').onclick=()=>preview.style.display='none';
+$('#save').onclick=()=>{if(!previewImg.src)return;let a=document.createElement('a');a.href=previewImg.src;a.download=`conecta-2026-${area}-${ratio.replace(':','x')}.png`;document.body.appendChild(a);a.click();a.remove()};
 
-function getRatioValue() {
-  return ratio === '9:16' ? 9/16 : ratio === '4:5' ? 4/5 : 1;
-}
-
-async function openCam(facing) {
-  if (stream) stream.getTracks().forEach(t => t.stop());
-
-  stream = await navigator.mediaDevices.getUserMedia({
-    video: {
-      facingMode: facing,
-      width: { ideal: 1920 },
-      height: { ideal: 1080 }
-    },
-    audio: true
-  });
-
-  video.srcObject = stream;
-  await video.play();
-  front = facing === 'user';
-  video.classList.toggle('mirror', front);
-}
-
-openCam('user').catch(() => alert('Permita acesso à câmera e ao microfone.'));
-refreshIcons();
-
-flipBtn.addEventListener('click', async () => {
-  if (recording) return;
-  try {
-    await openCam(front ? 'environment' : 'user');
-  } catch {
-    alert('Não foi possível trocar a câmera.');
-  }
-});
-
-flashBtn.addEventListener('click', () => {
-  flashArmed = !flashArmed;
-  flashBtn.classList.toggle('on', flashArmed);
-});
-
-document.querySelectorAll('[data-area]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('[data-area]').forEach(x => x.classList.remove('active'));
-    btn.classList.add('active');
-    area = btn.dataset.area;
-    tag.textContent = labels[area];
-    refreshIcons();
-  });
-});
-
-document.querySelectorAll('[data-fx]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('[data-fx]').forEach(x => x.classList.remove('active'));
-    btn.classList.add('active');
-    effect = btn.dataset.fx;
-    video.style.filter = filters[effect];
-  });
-});
-
-formatBtn.addEventListener('click', () => {
-  ratio = ratio === '9:16' ? '4:5' : ratio === '4:5' ? '1:1' : '9:16';
-  formatBtn.textContent = ratio; formatBtn.dataset.current=ratio;
-});
-
-function setMode(mode) {
-  const isPhoto = mode === 'foto';
-  photoMode.classList.toggle('active', isPhoto);
-  videoMode.classList.toggle('active', !isPhoto);
-  shot.style.display = isPhoto ? 'block' : 'none';
-  recordBtn.style.display = isPhoto ? 'none' : 'block';
-  if (isPhoto) stopBtn.style.display = 'none';
-}
-
-photoMode.addEventListener('click', () => setMode('foto'));
-videoMode.addEventListener('click', () => setMode('video'));
-
-/* 
-   Reproduz no canvas o MESMO enquadramento do <video object-fit:cover>.
-   Depois recorta esse quadro para 9:16 / 4:5 / 1:1.
-*/
-function objectCoverSource(srcW, srcH, boxW, boxH) {
-  const srcRatio = srcW / srcH;
-  const boxRatio = boxW / boxH;
-
-  if (srcRatio > boxRatio) {
-    const cropW = srcH * boxRatio;
-    return { sx: (srcW - cropW) / 2, sy: 0, sw: cropW, sh: srcH };
-  } else {
-    const cropH = srcW / boxRatio;
-    return { sx: 0, sy: (srcH - cropH) / 2, sw: srcW, sh: cropH };
-  }
-}
-
-function outputDimensions() {
-  // Qualidade alta mantendo o formato selecionado.
-  if (ratio === '9:16') return { w: 1080, h: 1920 };
-  if (ratio === '4:5') return { w: 1080, h: 1350 };
-  return { w: 1080, h: 1080 };
-}
-
-function drawCameraLikeScreen(ctx, w, h) {
-  const vw = video.videoWidth;
-  const vh = video.videoHeight;
-  if (!vw || !vh) return;
-
-  const src = objectCoverSource(vw, vh, w, h);
-
-  ctx.save();
-  ctx.filter = filters[effect];
-
-  if (front) {
-    ctx.translate(w, 0);
-    ctx.scale(-1, 1);
-  }
-
-  ctx.drawImage(
-    video,
-    src.sx, src.sy, src.sw, src.sh,
-    0, 0, w, h
-  );
-  ctx.restore();
-}
-
-function roundedRect(ctx, x, y, w, h, r) {
-  const rr = Math.min(r, w/2, h/2);
-  ctx.beginPath();
-  ctx.moveTo(x+rr,y);
-  ctx.arcTo(x+w,y,x+w,y+h,rr);
-  ctx.arcTo(x+w,y+h,x,y+h,rr);
-  ctx.arcTo(x,y+h,x,y,rr);
-  ctx.arcTo(x,y,x+w,y,rr);
-  ctx.closePath();
-}
-
-function drawOverlayExactly(ctx, w, h) {
-  const sx = w / Math.max(document.documentElement.clientWidth, 1);
-  const sy = h / Math.max(document.documentElement.clientHeight, 1);
-  const s = Math.min(sx, sy);
-
-  // Mesmo sombreado da tela
-  const top = ctx.createLinearGradient(0, 0, 0, h * .25);
-  top.addColorStop(0, 'rgba(0,0,0,.60)');
-  top.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = top;
-  ctx.fillRect(0, 0, w, h * .28);
-
-  const bottom = ctx.createLinearGradient(0, h * .60, 0, h);
-  bottom.addColorStop(0, 'rgba(0,0,0,0)');
-  bottom.addColorStop(1, 'rgba(0,0,0,.82)');
-  ctx.fillStyle = bottom;
-  ctx.fillRect(0, h * .58, w, h * .42);
-
-  // Logo
-  const left = 14 * sx;
-  const topY = 14 * sy;
-  const logoW = 72 * s;
-  const logoH = 50 * s;
-
-  if (logo.complete && logo.naturalWidth) {
-    const r = Math.min(logoW / logo.naturalWidth, logoH / logo.naturalHeight);
-    ctx.drawImage(logo, left, topY, logo.naturalWidth*r, logo.naturalHeight*r);
-  }
-
-  // Título exatamente próximo ao logo
-  ctx.save();
-  ctx.shadowColor = 'rgba(0,0,0,.95)';
-  ctx.shadowBlur = 6 * s;
-  ctx.textAlign = 'left';
-
-  const titleX = left + 82 * s;
-  ctx.font = `900 ${25*s}px Arial`;
-  ctx.fillStyle = '#fff';
-  ctx.fillText('CONECTA', titleX, topY + 23*s);
-  const conectaWidth = ctx.measureText('CONECTA ').width;
-  ctx.fillStyle = '#55cf67';
-  ctx.fillText('2026', titleX + conectaWidth, topY + 23*s);
-
-  ctx.fillStyle = '#fff';
-  ctx.font = `700 ${10*s}px Arial`;
-  ctx.fillText('Gerência de Energia e Automação', titleX, topY + 39*s);
-
-  // Tag da área — mesma posição visual da tela
-  const tagX = 14 * sx;
-  const tagY = 83 * sy;
-  const tagPadX = 10 * s;
-  const tagPadY = 7 * s;
-  ctx.font = `900 ${12*s}px Arial`;
-  const textW = ctx.measureText(labels[area]).width;
-
-  ctx.fillStyle = 'rgba(0,0,0,.55)';
-  roundedRect(ctx, tagX, tagY, textW + tagPadX*2 + 4*s, 28*s, 3*s);
-  ctx.fill();
-
-  ctx.fillStyle = '#55cf67';
-  ctx.fillRect(tagX, tagY, 3*s, 28*s);
-
-  ctx.fillStyle = '#fff';
-  ctx.fillText(labels[area], tagX + 9*s, tagY + 19*s);
-
-  ctx.restore();
-}
-
-function renderFinal(targetCanvas) {
-  const { w, h } = outputDimensions();
-  targetCanvas.width = w;
-  targetCanvas.height = h;
-  const ctx = targetCanvas.getContext('2d');
-
-  ctx.clearRect(0, 0, w, h);
-  drawCameraLikeScreen(ctx, w, h);
-  drawOverlayExactly(ctx, w, h);
-}
-
-async function takePhoto() {
-  if (!stream || !video.videoWidth) return;
-
-  if (flashArmed) {
-    flashScreen.classList.add('fire');
-    await new Promise(r => setTimeout(r, 140));
-  }
-
-  renderFinal(canvas);
-
-  flashScreen.classList.remove('fire');
-  previewImg.src = canvas.toDataURL('image/png', 1.0);
-  preview.style.display = 'flex';
-}
-
-shot.addEventListener('click', takePhoto);
-
-closeBtn.addEventListener('click', (ev) => {
-  ev.preventDefault();
-  preview.style.display = 'none';
-});
-
-saveBtn.addEventListener('click', (ev) => {
-  ev.preventDefault();
-
-  if (!previewImg.src || !previewImg.src.startsWith('data:image')) {
-    alert('Tire uma foto antes de salvar.');
-    return;
-  }
-
-  const a = document.createElement('a');
-  a.href = previewImg.src;
-  a.download = `conecta-2026-${area}-${ratio.replace(':','x')}.png`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-});
-
-lastBtn.addEventListener('click', () => {
-  if (previewImg.src && previewImg.src.startsWith('data:image')) {
-    preview.style.display = 'flex';
-  }
-});
-
-recordBtn.addEventListener('click', () => {
-  if (!recCanvas.captureStream || !window.MediaRecorder) {
-    alert('Vídeo não suportado neste navegador.');
-    return;
-  }
-
-  const { w: baseW, h: baseH } = outputDimensions();
-  const scale = Math.min(720 / baseW, 1);
-  recCanvas.width = Math.round(baseW * scale);
-  recCanvas.height = Math.round(baseH * scale);
-
-  const ctx = recCanvas.getContext('2d');
-  recording = true;
-  chunks = [];
-
-  function loop() {
-    if (!recording) return;
-    ctx.clearRect(0, 0, recCanvas.width, recCanvas.height);
-    drawCameraLikeScreen(ctx, recCanvas.width, recCanvas.height);
-    drawOverlayExactly(ctx, recCanvas.width, recCanvas.height);
-    requestAnimationFrame(loop);
-  }
-  loop();
-
-  const canvasStream = recCanvas.captureStream(24);
-  const mixed = new MediaStream();
-
-  canvasStream.getVideoTracks().forEach(t => mixed.addTrack(t));
-  stream.getAudioTracks().forEach(t => mixed.addTrack(t));
-
-  const opts = MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus')
-    ? { mimeType: 'video/webm;codecs=vp8,opus' }
-    : {};
-
-  mediaRecorder = new MediaRecorder(mixed, opts);
-  mediaRecorder.ondataavailable = e => {
-    if (e.data && e.data.size) chunks.push(e.data);
-  };
-
-  mediaRecorder.onstop = () => {
-    const blob = new Blob(chunks, { type: mediaRecorder.mimeType || 'video/webm' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `conecta-2026-${area}-${ratio.replace(':','x')}.webm`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 3000);
-  };
-
-  mediaRecorder.start();
-  recordBtn.style.display = 'none';
-  stopBtn.style.display = 'block';
-});
-
-stopBtn.addEventListener('click', () => {
-  recording = false;
-  if (mediaRecorder?.state === 'recording') mediaRecorder.stop();
-  stopBtn.style.display = 'none';
-  recordBtn.style.display = 'block';
-});
-</script></body></html>
+recordBtn.onclick=()=>{
+  if(!recCanvas.captureStream||!window.MediaRecorder)return alert('Vídeo não suportado neste navegador.');
+  let s=outSize(),scale=Math.min(720/s.w,1);recCanvas.width=Math.round(s.w*scale);recCanvas.height=Math.round(s.h*scale);
+  let ctx=recCanvas.getContext('2d');recording=true;chunks=[];
+  function loop(){if(!recording)return;draw(ctx,recCanvas.width,recCanvas.height);requestAnimationFrame(loop)}loop();
+  let cs=recCanvas.captureStream(24),mix=new MediaStream();cs.getVideoTracks().forEach(t=>mix.addTrack(t));stream.getAudioTracks().forEach(t=>mix.addTrack(t));
+  mediaRecorder=new MediaRecorder(mix,MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus')?{mimeType:'video/webm;codecs=vp8,opus'}:{});
+  mediaRecorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+  mediaRecorder.onstop=()=>{let u=URL.createObjectURL(new Blob(chunks,{type:mediaRecorder.mimeType||'video/webm'})),a=document.createElement('a');a.href=u;a.download=`conecta-2026-${area}.webm`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),3000)};
+  mediaRecorder.start();recordBtn.style.display='none';stopBtn.style.display='block'
+};
+stopBtn.onclick=()=>{recording=false;if(mediaRecorder?.state==='recording')mediaRecorder.stop();stopBtn.style.display='none';recordBtn.style.display='block'};
+</script>
+</body>
+</html>
