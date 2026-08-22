@@ -19,7 +19,7 @@ header{position:fixed;z-index:5;top:14px;left:14px;right:14px;display:flex;align
 #shot,#record{width:67px;height:67px;border-radius:50%;border:5px solid #fff;box-shadow:0 0 0 3px #55cf67}#shot{background:transparent}#record{display:none;background:#d72e2e}#stop{display:none;background:#9b1d1d}
 #flashScreen{position:fixed;z-index:30;inset:0;background:#fff;opacity:0;pointer-events:none}#flashScreen.fire{opacity:1}
 #preview{display:none;position:fixed;z-index:40;inset:0;background:#050705;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:15px}#preview img{max-width:94vw;max-height:78vh;border-radius:12px}
-#preview button{border:1px solid #55cf67;background:#111;color:#fff;border-radius:20px;padding:10px 15px;font-weight:700}
+#preview button{position:relative;z-index:50;border:1px solid #55cf67;background:#111;color:#fff;border-radius:20px;padding:12px 18px;font-weight:700;touch-action:manipulation}
 </style></head>
 <body>
 <video id="video" autoplay muted playsinline></video><div id="shade"></div>
@@ -33,23 +33,368 @@ header{position:fixed;z-index:5;top:14px;left:14px;right:14px;display:flex;align
 <div id="flashScreen"></div><canvas id="canvas" hidden></canvas><canvas id="recCanvas" hidden></canvas>
 <div id="preview"><img id="previewImg"><div><button id="save">Salvar</button> <button id="close">Voltar</button></div></div>
 <script>
-const v=document.querySelector('#video'),tag=document.querySelector('#tag'),shot=document.querySelector('#shot'),record=document.querySelector('#record'),stopBtn=document.querySelector('#stop'),cv=document.querySelector('#canvas'),rcv=document.querySelector('#recCanvas'),pi=document.querySelector('#previewImg'),preview=document.querySelector('#preview'),logo=new Image();logo.src='logo-hydro.png';
-let stream,front=true,armed=false,area='geral',fx='natural',ratio='9:16',recording=false,mr,chunks=[];
-const labels={geral:'CONECTA 2026 • GERAL',operacao:'OPERAÇÃO DO SISTEMA ELÉTRICO',manutencao:'MANUTENÇÃO DO SISTEMA ELÉTRICO',automacao:'AUTOMAÇÃO'};
-const foot={geral:'ENERGIA  •  OPERAÇÃO  •  MANUTENÇÃO  •  AUTOMAÇÃO',operacao:'⚡ OPERAÇÃO DO SISTEMA ELÉTRICO',manutencao:'🔧 MANUTENÇÃO DO SISTEMA ELÉTRICO',automacao:'⚙ AUTOMAÇÃO'};
-const filters={natural:'none',vivo:'saturate(1.35) contrast(1.08)',frio:'saturate(.9) hue-rotate(12deg)',quente:'sepia(.2) saturate(1.18)',pb:'grayscale(1) contrast(1.12)'};
-async function openCam(f){if(stream)stream.getTracks().forEach(t=>t.stop());stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:f,width:{ideal:1920},height:{ideal:1080}},audio:true});v.srcObject=stream;front=f==='user';v.classList.toggle('mirror',front)}
-openCam('user').catch(()=>alert('Permita acesso à câmera e ao microfone.'));
-flip.onclick=()=>{if(!recording)openCam(front?'environment':'user')};flash.onclick=()=>{armed=!armed;flash.classList.toggle('on',armed)};
-document.querySelectorAll('[data-area]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-area]').forEach(x=>x.classList.remove('active'));b.classList.add('active');area=b.dataset.area;tag.textContent=labels[area]});
-document.querySelectorAll('[data-fx]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-fx]').forEach(x=>x.classList.remove('active'));b.classList.add('active');fx=b.dataset.fx;v.style.filter=filters[fx]});
-format.onclick=()=>{ratio=ratio==='9:16'?'4:5':ratio==='4:5'?'1:1':'9:16';format.textContent=ratio};
-function mode(m){photoMode.classList.toggle('active',m==='foto');videoMode.classList.toggle('active',m==='video');shot.style.display=m==='foto'?'block':'none';record.style.display=m==='video'?'block':'none'}photoMode.onclick=()=>mode('foto');videoMode.onclick=()=>mode('video');
-function dims(sw,sh){let r=ratio==='9:16'?9/16:ratio==='4:5'?4/5:1,sr=sw/sh,sx=0,sy=0,cw=sw,ch=sh;if(sr>r){cw=sh*r;sx=(sw-cw)/2}else{ch=sw/r;sy=(sh-ch)/2}return{sx,sy,cw,ch,w:Math.round(cw),h:Math.round(ch)}}
-function brand(c,w,h){let a=c.createLinearGradient(0,0,0,h*.22);a.addColorStop(0,'#000b');a.addColorStop(1,'#0000');c.fillStyle=a;c.fillRect(0,0,w,h*.25);let b=c.createLinearGradient(0,h*.7,0,h);b.addColorStop(0,'#0000');b.addColorStop(1,'#000d');c.fillStyle=b;c.fillRect(0,h*.68,w,h*.32);if(logo.complete&&logo.naturalWidth){let mw=w*.2,mh=h*.08,r=Math.min(mw/logo.naturalWidth,mh/logo.naturalHeight);c.drawImage(logo,w*.04,h*.025,logo.naturalWidth*r,logo.naturalHeight*r)}c.shadowColor='#000';c.shadowBlur=7;c.textAlign='left';c.fillStyle='#fff';c.font=`900 ${w*.052}px Arial`;c.fillText('CONECTA',w*.28,h*.065);c.fillStyle='#55cf67';c.fillText('2026',w*.28,h*.115);c.fillStyle='#fff';c.font=`700 ${w*.021}px Arial`;c.fillText('Gerência de Energia e Automação',w*.28,h*.15);c.fillStyle='#55cf67';c.font=`800 ${w*.024}px Arial`;c.fillText(labels[area],w*.04,h*.205);c.textAlign='center';c.fillStyle='#fff';c.font=`800 ${w*.021}px Arial`;c.fillText(foot[area],w/2,h*.9)}
-function draw(c,w,h){let d=dims(v.videoWidth,v.videoHeight);c.save();c.filter=filters[fx];if(front){c.translate(w,0);c.scale(-1,1)}c.drawImage(v,d.sx,d.sy,d.cw,d.ch,0,0,w,h);c.restore();brand(c,w,h)}
-shot.onclick=async()=>{let d=dims(v.videoWidth,v.videoHeight);cv.width=d.w;cv.height=d.h;if(armed){flashScreen.classList.add('fire');await new Promise(r=>setTimeout(r,120))}draw(cv.getContext('2d'),cv.width,cv.height);flashScreen.classList.remove('fire');pi.src=cv.toDataURL('image/png');preview.style.display='flex'};
-close.onclick=()=>preview.style.display='none';save.onclick=()=>{let a=document.createElement('a');a.href=pi.src;a.download=`conecta-2026-${area}.png`;a.click()};last.onclick=()=>{if(pi.src)preview.style.display='flex'};
-record.onclick=()=>{if(!rcv.captureStream||!window.MediaRecorder)return alert('Vídeo não suportado neste navegador.');let d=dims(v.videoWidth,v.videoHeight),w=Math.min(720,d.w),h=Math.round(w*d.h/d.w);rcv.width=w;rcv.height=h;let c=rcv.getContext('2d');recording=true;chunks=[];function loop(){if(!recording)return;draw(c,w,h);requestAnimationFrame(loop)}loop();let cs=rcv.captureStream(24),mix=new MediaStream();cs.getVideoTracks().forEach(t=>mix.addTrack(t));stream.getAudioTracks().forEach(t=>mix.addTrack(t));mr=new MediaRecorder(mix);mr.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};mr.onstop=()=>{let u=URL.createObjectURL(new Blob(chunks,{type:mr.mimeType})),a=document.createElement('a');a.href=u;a.download=`conecta-2026-${area}.webm`;a.click()};mr.start();record.style.display='none';stopBtn.style.display='block'};
-stopBtn.onclick=()=>{recording=false;if(mr?.state==='recording')mr.stop();stopBtn.style.display='none';record.style.display='block'};
+const $ = (s) => document.querySelector(s);
+const video = $('#video');
+const tag = $('#tag');
+const shot = $('#shot');
+const recordBtn = $('#record');
+const stopBtn = $('#stop');
+const canvas = $('#canvas');
+const recCanvas = $('#recCanvas');
+const previewImg = $('#previewImg');
+const preview = $('#preview');
+const flashScreen = $('#flashScreen');
+const flipBtn = $('#flip');
+const flashBtn = $('#flash');
+const formatBtn = $('#format');
+const photoMode = $('#photoMode');
+const videoMode = $('#videoMode');
+const saveBtn = $('#save');
+const closeBtn = $('#close');
+const lastBtn = $('#last');
+
+const logo = new Image();
+logo.src = 'logo-hydro.png';
+
+let stream = null;
+let front = true;
+let flashArmed = false;
+let area = 'geral';
+let effect = 'natural';
+let ratio = '9:16';
+let recording = false;
+let mediaRecorder = null;
+let chunks = [];
+
+const labels = {
+  geral: 'CONECTA 2026 • GERAL',
+  operacao: 'OPERAÇÃO DO SISTEMA ELÉTRICO',
+  manutencao: 'MANUTENÇÃO DO SISTEMA ELÉTRICO',
+  automacao: 'AUTOMAÇÃO'
+};
+
+const filters = {
+  natural: 'none',
+  vivo: 'saturate(1.35) contrast(1.08)',
+  frio: 'saturate(.90) contrast(1.04) hue-rotate(12deg)',
+  quente: 'sepia(.20) saturate(1.18) contrast(1.03)',
+  pb: 'grayscale(1) contrast(1.12)'
+};
+
+function getRatioValue() {
+  return ratio === '9:16' ? 9/16 : ratio === '4:5' ? 4/5 : 1;
+}
+
+async function openCam(facing) {
+  if (stream) stream.getTracks().forEach(t => t.stop());
+
+  stream = await navigator.mediaDevices.getUserMedia({
+    video: {
+      facingMode: facing,
+      width: { ideal: 1920 },
+      height: { ideal: 1080 }
+    },
+    audio: true
+  });
+
+  video.srcObject = stream;
+  await video.play();
+  front = facing === 'user';
+  video.classList.toggle('mirror', front);
+}
+
+openCam('user').catch(() => alert('Permita acesso à câmera e ao microfone.'));
+
+flipBtn.addEventListener('click', async () => {
+  if (recording) return;
+  try {
+    await openCam(front ? 'environment' : 'user');
+  } catch {
+    alert('Não foi possível trocar a câmera.');
+  }
+});
+
+flashBtn.addEventListener('click', () => {
+  flashArmed = !flashArmed;
+  flashBtn.classList.toggle('on', flashArmed);
+});
+
+document.querySelectorAll('[data-area]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-area]').forEach(x => x.classList.remove('active'));
+    btn.classList.add('active');
+    area = btn.dataset.area;
+    tag.textContent = labels[area];
+  });
+});
+
+document.querySelectorAll('[data-fx]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-fx]').forEach(x => x.classList.remove('active'));
+    btn.classList.add('active');
+    effect = btn.dataset.fx;
+    video.style.filter = filters[effect];
+  });
+});
+
+formatBtn.addEventListener('click', () => {
+  ratio = ratio === '9:16' ? '4:5' : ratio === '4:5' ? '1:1' : '9:16';
+  formatBtn.textContent = ratio;
+});
+
+function setMode(mode) {
+  const isPhoto = mode === 'foto';
+  photoMode.classList.toggle('active', isPhoto);
+  videoMode.classList.toggle('active', !isPhoto);
+  shot.style.display = isPhoto ? 'block' : 'none';
+  recordBtn.style.display = isPhoto ? 'none' : 'block';
+  if (isPhoto) stopBtn.style.display = 'none';
+}
+
+photoMode.addEventListener('click', () => setMode('foto'));
+videoMode.addEventListener('click', () => setMode('video'));
+
+/* 
+   Reproduz no canvas o MESMO enquadramento do <video object-fit:cover>.
+   Depois recorta esse quadro para 9:16 / 4:5 / 1:1.
+*/
+function objectCoverSource(srcW, srcH, boxW, boxH) {
+  const srcRatio = srcW / srcH;
+  const boxRatio = boxW / boxH;
+
+  if (srcRatio > boxRatio) {
+    const cropW = srcH * boxRatio;
+    return { sx: (srcW - cropW) / 2, sy: 0, sw: cropW, sh: srcH };
+  } else {
+    const cropH = srcW / boxRatio;
+    return { sx: 0, sy: (srcH - cropH) / 2, sw: srcW, sh: cropH };
+  }
+}
+
+function outputDimensions() {
+  // Qualidade alta mantendo o formato selecionado.
+  if (ratio === '9:16') return { w: 1080, h: 1920 };
+  if (ratio === '4:5') return { w: 1080, h: 1350 };
+  return { w: 1080, h: 1080 };
+}
+
+function drawCameraLikeScreen(ctx, w, h) {
+  const vw = video.videoWidth;
+  const vh = video.videoHeight;
+  if (!vw || !vh) return;
+
+  const src = objectCoverSource(vw, vh, w, h);
+
+  ctx.save();
+  ctx.filter = filters[effect];
+
+  if (front) {
+    ctx.translate(w, 0);
+    ctx.scale(-1, 1);
+  }
+
+  ctx.drawImage(
+    video,
+    src.sx, src.sy, src.sw, src.sh,
+    0, 0, w, h
+  );
+  ctx.restore();
+}
+
+function roundedRect(ctx, x, y, w, h, r) {
+  const rr = Math.min(r, w/2, h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+rr,y);
+  ctx.arcTo(x+w,y,x+w,y+h,rr);
+  ctx.arcTo(x+w,y+h,x,y+h,rr);
+  ctx.arcTo(x,y+h,x,y,rr);
+  ctx.arcTo(x,y,x+w,y,rr);
+  ctx.closePath();
+}
+
+function drawOverlayExactly(ctx, w, h) {
+  const sx = w / Math.max(document.documentElement.clientWidth, 1);
+  const sy = h / Math.max(document.documentElement.clientHeight, 1);
+  const s = Math.min(sx, sy);
+
+  // Mesmo sombreado da tela
+  const top = ctx.createLinearGradient(0, 0, 0, h * .25);
+  top.addColorStop(0, 'rgba(0,0,0,.60)');
+  top.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = top;
+  ctx.fillRect(0, 0, w, h * .28);
+
+  const bottom = ctx.createLinearGradient(0, h * .60, 0, h);
+  bottom.addColorStop(0, 'rgba(0,0,0,0)');
+  bottom.addColorStop(1, 'rgba(0,0,0,.82)');
+  ctx.fillStyle = bottom;
+  ctx.fillRect(0, h * .58, w, h * .42);
+
+  // Logo
+  const left = 14 * sx;
+  const topY = 14 * sy;
+  const logoW = 72 * s;
+  const logoH = 50 * s;
+
+  if (logo.complete && logo.naturalWidth) {
+    const r = Math.min(logoW / logo.naturalWidth, logoH / logo.naturalHeight);
+    ctx.drawImage(logo, left, topY, logo.naturalWidth*r, logo.naturalHeight*r);
+  }
+
+  // Título exatamente próximo ao logo
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,.95)';
+  ctx.shadowBlur = 6 * s;
+  ctx.textAlign = 'left';
+
+  const titleX = left + 82 * s;
+  ctx.font = `900 ${25*s}px Arial`;
+  ctx.fillStyle = '#fff';
+  ctx.fillText('CONECTA', titleX, topY + 23*s);
+  const conectaWidth = ctx.measureText('CONECTA ').width;
+  ctx.fillStyle = '#55cf67';
+  ctx.fillText('2026', titleX + conectaWidth, topY + 23*s);
+
+  ctx.fillStyle = '#fff';
+  ctx.font = `700 ${10*s}px Arial`;
+  ctx.fillText('Gerência de Energia e Automação', titleX, topY + 39*s);
+
+  // Tag da área — mesma posição visual da tela
+  const tagX = 14 * sx;
+  const tagY = 83 * sy;
+  const tagPadX = 10 * s;
+  const tagPadY = 7 * s;
+  ctx.font = `900 ${12*s}px Arial`;
+  const textW = ctx.measureText(labels[area]).width;
+
+  ctx.fillStyle = 'rgba(0,0,0,.55)';
+  roundedRect(ctx, tagX, tagY, textW + tagPadX*2 + 4*s, 28*s, 3*s);
+  ctx.fill();
+
+  ctx.fillStyle = '#55cf67';
+  ctx.fillRect(tagX, tagY, 3*s, 28*s);
+
+  ctx.fillStyle = '#fff';
+  ctx.fillText(labels[area], tagX + 9*s, tagY + 19*s);
+
+  ctx.restore();
+}
+
+function renderFinal(targetCanvas) {
+  const { w, h } = outputDimensions();
+  targetCanvas.width = w;
+  targetCanvas.height = h;
+  const ctx = targetCanvas.getContext('2d');
+
+  ctx.clearRect(0, 0, w, h);
+  drawCameraLikeScreen(ctx, w, h);
+  drawOverlayExactly(ctx, w, h);
+}
+
+async function takePhoto() {
+  if (!stream || !video.videoWidth) return;
+
+  if (flashArmed) {
+    flashScreen.classList.add('fire');
+    await new Promise(r => setTimeout(r, 140));
+  }
+
+  renderFinal(canvas);
+
+  flashScreen.classList.remove('fire');
+  previewImg.src = canvas.toDataURL('image/png', 1.0);
+  preview.style.display = 'flex';
+}
+
+shot.addEventListener('click', takePhoto);
+
+closeBtn.addEventListener('click', (ev) => {
+  ev.preventDefault();
+  preview.style.display = 'none';
+});
+
+saveBtn.addEventListener('click', (ev) => {
+  ev.preventDefault();
+
+  if (!previewImg.src || !previewImg.src.startsWith('data:image')) {
+    alert('Tire uma foto antes de salvar.');
+    return;
+  }
+
+  const a = document.createElement('a');
+  a.href = previewImg.src;
+  a.download = `conecta-2026-${area}-${ratio.replace(':','x')}.png`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+});
+
+lastBtn.addEventListener('click', () => {
+  if (previewImg.src && previewImg.src.startsWith('data:image')) {
+    preview.style.display = 'flex';
+  }
+});
+
+recordBtn.addEventListener('click', () => {
+  if (!recCanvas.captureStream || !window.MediaRecorder) {
+    alert('Vídeo não suportado neste navegador.');
+    return;
+  }
+
+  const { w: baseW, h: baseH } = outputDimensions();
+  const scale = Math.min(720 / baseW, 1);
+  recCanvas.width = Math.round(baseW * scale);
+  recCanvas.height = Math.round(baseH * scale);
+
+  const ctx = recCanvas.getContext('2d');
+  recording = true;
+  chunks = [];
+
+  function loop() {
+    if (!recording) return;
+    ctx.clearRect(0, 0, recCanvas.width, recCanvas.height);
+    drawCameraLikeScreen(ctx, recCanvas.width, recCanvas.height);
+    drawOverlayExactly(ctx, recCanvas.width, recCanvas.height);
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  const canvasStream = recCanvas.captureStream(24);
+  const mixed = new MediaStream();
+
+  canvasStream.getVideoTracks().forEach(t => mixed.addTrack(t));
+  stream.getAudioTracks().forEach(t => mixed.addTrack(t));
+
+  const opts = MediaRecorder.isTypeSupported('video/webm;codecs=vp8,opus')
+    ? { mimeType: 'video/webm;codecs=vp8,opus' }
+    : {};
+
+  mediaRecorder = new MediaRecorder(mixed, opts);
+  mediaRecorder.ondataavailable = e => {
+    if (e.data && e.data.size) chunks.push(e.data);
+  };
+
+  mediaRecorder.onstop = () => {
+    const blob = new Blob(chunks, { type: mediaRecorder.mimeType || 'video/webm' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `conecta-2026-${area}-${ratio.replace(':','x')}.webm`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+  };
+
+  mediaRecorder.start();
+  recordBtn.style.display = 'none';
+  stopBtn.style.display = 'block';
+});
+
+stopBtn.addEventListener('click', () => {
+  recording = false;
+  if (mediaRecorder?.state === 'recording') mediaRecorder.stop();
+  stopBtn.style.display = 'none';
+  recordBtn.style.display = 'block';
+});
 </script></body></html>
