@@ -17,7 +17,7 @@
 #title{font-weight:900;font-size:clamp(24px,7vw,35px);line-height:.87;text-shadow:0 2px 5px #000}
 #title span{display:block;color:var(--teal)}
 #dept{font-size:clamp(9px,2.5vw,12px);font-weight:700;line-height:1.1;margin-top:6px;text-shadow:0 2px 4px #000}
-#areaTitle{position:absolute;left:10px;right:10px;bottom:31%;text-align:center;color:var(--teal);font-size:clamp(24px,7vw,38px);letter-spacing:4px;font-weight:800;text-shadow:0 3px 8px #000}
+#areaTitle{position:absolute;left:10px;right:10px;bottom:21.5%;text-align:center;color:var(--teal);font-size:clamp(24px,7vw,38px);letter-spacing:4px;font-weight:800;text-shadow:0 3px 8px #000}
 #tagline{display:block;margin-top:12px;color:var(--sand);font-size:clamp(14px,4vw,20px);letter-spacing:0;font-weight:500}
 .themeIcon{position:absolute;font-size:clamp(24px,6.5vw,36px);filter:drop-shadow(0 3px 5px #000);opacity:.85}
 .i1{left:5%;top:18%}.i2{right:5%;top:19%}.i3{left:5%;top:36%}.i4{right:5%;top:38%}
@@ -30,11 +30,11 @@
 .areaBtn.active{color:var(--teal);border-bottom-color:var(--teal)}
 #formatBar{margin:8px auto 6px;width:min(66vw,310px);display:grid;grid-template-columns:repeat(3,1fr);background:rgba(20,24,26,.82);border:1px solid rgba(255,255,255,.14);border-radius:15px;overflow:hidden}
 .formatBtn{border:0;background:transparent;color:#ddd;padding:6px 2px;font-size:11px}.formatBtn b{display:block;font-size:14px}.formatBtn.active{background:rgba(118,134,146,.38);box-shadow:inset 0 0 0 2px rgba(197,185,172,.26)}
-#bottomRow{position:absolute;left:0;right:0;bottom:0;height:90px;display:flex;align-items:center;justify-content:center}
-#modes{position:absolute;left:10%;bottom:18px;font-size:11px}.mode{margin:0 5px;color:var(--gray);font-weight:800}.mode.active{color:var(--teal)}
-#shot,#record,#stop{width:70px;height:70px;border-radius:50%;border:5px solid #fff;box-shadow:0 0 0 2px rgba(255,255,255,.7)}
+#bottomRow{position:absolute;left:0;right:0;bottom:0;height:92px;display:flex;align-items:center;justify-content:center}
+#modes{position:absolute;left:4%;bottom:19px;font-size:11px}.mode{margin:0 5px;color:var(--gray);font-weight:800}.mode.active{color:var(--teal)}
+#shot,#record,#stop{position:absolute;z-index:20;left:50%;top:50%;transform:translate(-50%,-50%);width:70px;height:70px;border-radius:50%;border:5px solid #fff;box-shadow:0 0 0 2px rgba(255,255,255,.7)}
 #shot{background:#fff}#record{display:none;background:var(--rust)}#stop{display:none;background:var(--rust);color:#fff;font-size:22px}
-#effects{position:absolute;right:2%;left:51%;bottom:9px;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none}#effects::-webkit-scrollbar{display:none}
+#effects{position:absolute;right:2%;left:auto;width:38%;bottom:9px;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none}#effects::-webkit-scrollbar{display:none}
 .effect{flex:0 0 49px;height:59px;border:2px solid transparent;border-radius:12px;padding:36px 2px 2px;background:linear-gradient(135deg,var(--steel),var(--teal));color:#fff;font-size:8px}
 .effect:nth-child(2){background:linear-gradient(135deg,var(--teal),var(--sand))}.effect:nth-child(3){background:linear-gradient(135deg,var(--steel),var(--gray))}
 .effect:nth-child(4){background:linear-gradient(135deg,var(--rust),var(--sand))}.effect:nth-child(5){background:linear-gradient(135deg,#333,#aaa)}
@@ -161,8 +161,8 @@ function draw(ctx,w,h){
   ctx.textAlign='left';ctx.fillStyle='#fff';ctx.font=`900 ${w*.05}px Arial`;ctx.fillText('CONECTA',w*.52,h*.06);ctx.fillStyle='#43807A';ctx.fillText('2026',w*.52,h*.105);
   ctx.fillStyle='#fff';ctx.font=`700 ${w*.018}px Arial`;ctx.fillText('GERÊNCIA DE ENERGIA',w*.52,h*.135);ctx.fillText('E AUTOMAÇÃO',w*.52,h*.16);
 
-  ctx.textAlign='center';ctx.fillStyle=colors[area];ctx.font=`800 ${w*.055}px Arial`;ctx.fillText(labels[area],w/2,h*.72);
-  ctx.fillStyle='#C5B9AC';ctx.font=`500 ${w*.028}px Arial`;ctx.fillText('Na Alunorte nós inovamos',w/2,h*.77);
+  ctx.textAlign='center';ctx.fillStyle=colors[area];ctx.font=`800 ${w*.055}px Arial`;ctx.fillText(labels[area],w/2,h*.805);
+  ctx.fillStyle='#C5B9AC';ctx.font=`500 ${w*.028}px Arial`;ctx.fillText('Na Alunorte nós inovamos',w/2,h*.845);
 
   ctx.font=`${w*.035}px Arial`;let ys=[h*.22,h*.38,h*.54,h*.66];
   themes[area].slice(0,4).forEach((ic,i)=>ctx.fillText(ic,w*.07,ys[i]));
