@@ -6,35 +6,205 @@
 <meta name="theme-color" content="#444D55">
 <title>Conecta 2026</title>
 <style>
-:root{--slate:#444D55;--steel:#768692;--gray:#8C8C8C;--teal:#43807A;--sand:#C5B9AC;--wine:#4A3041;--rust:#B95946}
+/* =========================================================
+   PALETA DE CORES
+   Troque os HEX abaixo para mudar as cores do aplicativo.
+   ========================================================= */
+:root{
+  --slate:#444D55; /* cinza escuro principal */
+  --steel:#768692; /* azul/cinza */
+  --gray:#8C8C8C;  /* cinza médio */
+  --teal:#43807A;  /* verde/azulado principal */
+  --sand:#C5B9AC;  /* bege */
+  --wine:#4A3041;  /* vinho/roxo */
+  --rust:#B95946;  /* vermelho/laranja */
+}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111;font-family:Arial,sans-serif;color:#fff}
 #app{position:fixed;inset:0;overflow:hidden;background:#111}
 #video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.mirror{transform:scaleX(-1)}
 #overlay{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(20,24,26,.62) 0%,transparent 22%,transparent 55%,rgba(15,18,19,.83) 79%,rgba(12,14,15,.97) 100%)}
-#header{position:absolute;top:max(17px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:min(78vw,390px);display:flex;justify-content:center;align-items:center;gap:13px}
-#logo{width:88px;height:58px;object-fit:contain;filter:drop-shadow(0 2px 5px #000)}
+/* =========================================================
+   CABEÇALHO: LOGO HYDRO + CONECTA 2026
+   POSIÇÃO:
+   - top: aumenta = desce / diminui = sobe
+   - width: largura total do cabeçalho
+   ========================================================= */
+#header{
+  position:absolute;
+  top:max(17px,env(safe-area-inset-top)); /* MUDE AQUI para subir/descer o cabeçalho */
+  left:50%;
+  transform:translateX(-50%);
+  width:min(78vw,390px); /* MUDE AQUI para aumentar/diminuir a largura */
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:13px; /* espaço entre logo e texto */
+}
+/* TAMANHO DO LOGO HYDRO */
+#logo{
+  width:88px;   /* MUDE AQUI a largura do logo */
+  height:58px;  /* MUDE AQUI a altura do logo */
+  object-fit:contain;
+  filter:drop-shadow(0 2px 5px #000);
+}
 #brandText{border-left:2px solid rgba(255,255,255,.8);padding-left:13px}
 #title{font-weight:900;font-size:clamp(24px,7vw,35px);line-height:.87;text-shadow:0 2px 5px #000}
 #title span{display:block;color:var(--teal)}
 #dept{font-size:clamp(9px,2.5vw,12px);font-weight:700;line-height:1.1;margin-top:6px;text-shadow:0 2px 4px #000}
-#areaTitle{position:absolute;left:10px;right:10px;bottom:21.5%;text-align:center;color:var(--teal);font-size:clamp(24px,7vw,38px);letter-spacing:4px;font-weight:800;text-shadow:0 3px 8px #000}
-#tagline{display:block;margin-top:12px;color:var(--sand);font-size:clamp(14px,4vw,20px);letter-spacing:0;font-weight:500}
+/* =========================================================
+   NOME DA ÁREA NA FOTO
+   Ex.: OPERAÇÃO DO SISTEMA ELÉTRICO
+   POSIÇÃO:
+   - bottom maior = sobe
+   - bottom menor = desce
+   ========================================================= */
+#areaTitle{
+  position:absolute;
+  left:10px;
+  right:10px;
+  bottom:10.8%; /* MUDE AQUI para subir/descer o nome da área */
+  text-align:center;
+  color:var(--teal);
+  font-size:clamp(24px,7vw,38px); /* MUDE AQUI o tamanho do texto */
+  letter-spacing:4px; /* espaçamento entre letras */
+  font-weight:800;
+  text-shadow:0 3px 8px #000;
+}
+/* FRASE "Na Alunorte nós inovamos"
+   margin-top maior = afasta mais do nome da área */
+#tagline{
+  display:block;
+  margin-top:12px; /* MUDE AQUI a distância para o título da área */
+  color:var(--sand);
+  font-size:clamp(14px,4vw,20px); /* MUDE AQUI o tamanho da frase */
+  letter-spacing:0;
+  font-weight:500;
+}
 .themeIcon{position:absolute;font-size:clamp(24px,6.5vw,36px);filter:drop-shadow(0 3px 5px #000);opacity:.85}
-.i1{left:5%;top:18%}.i2{right:5%;top:19%}.i3{left:5%;top:36%}.i4{right:5%;top:38%}
-.i5{left:5%;top:53%}.i6{right:5%;top:54%}.i7{left:5%;top:68%}.i8{right:5%;top:68%}
-#topTools{position:absolute;z-index:10;top:max(15px,env(safe-area-inset-top));left:10px;right:10px;display:flex;justify-content:space-between}
+/* =========================================================
+   POSIÇÃO DOS 8 EMOJIS DA MOLDURA
+   - left/right controla a distância da borda
+   - top controla a altura
+   ========================================================= */
+.i1{left:5%; top:18%}  /* canto/lado esquerdo superior */
+.i2{right:5%;top:19%}  /* lado direito superior */
+.i3{left:5%; top:36%}
+.i4{right:5%;top:38%}
+.i5{left:5%; top:53%}
+.i6{right:5%;top:54%}
+.i7{left:5%; top:68%}
+.i8{right:5%;top:68%}
+/* =========================================================
+   BOTÕES SUPERIORES: TROCAR CÂMERA E FLASH
+   top controla a altura.
+   left/right controlam distância das bordas.
+   ========================================================= */
+#topTools{
+  position:absolute;
+  z-index:10;
+  top:max(15px,env(safe-area-inset-top)); /* MUDE AQUI para subir/descer */
+  left:10px;  /* distância da esquerda */
+  right:10px; /* distância da direita */
+  display:flex;
+  justify-content:space-between;
+}
 .tool{width:44px;height:44px;border:0;background:transparent;color:#fff;font-size:26px;text-shadow:0 2px 5px #000}.tool.on{color:var(--rust)}
-#controls{position:absolute;z-index:11;left:0;right:0;bottom:max(4px,env(safe-area-inset-bottom));height:29%}
-#areas{display:flex;justify-content:center;gap:2px;padding:0 5px}
-.areaBtn{border:0;background:transparent;color:var(--gray);font-weight:800;font-size:clamp(9px,2.4vw,12px);padding:7px 6px;border-bottom:2px solid transparent}
-.areaBtn.active{color:var(--teal);border-bottom-color:var(--teal)}
-#formatBar{margin:8px auto 6px;width:min(66vw,310px);display:grid;grid-template-columns:repeat(3,1fr);background:rgba(20,24,26,.82);border:1px solid rgba(255,255,255,.14);border-radius:15px;overflow:hidden}
-.formatBtn{border:0;background:transparent;color:#ddd;padding:6px 2px;font-size:11px}.formatBtn b{display:block;font-size:14px}.formatBtn.active{background:rgba(118,134,146,.38);box-shadow:inset 0 0 0 2px rgba(197,185,172,.26)}
-#bottomRow{position:absolute;left:0;right:0;bottom:0;height:92px;display:flex;align-items:center;justify-content:center}
-#modes{position:absolute;left:4%;bottom:19px;font-size:11px}.mode{margin:0 5px;color:var(--gray);font-weight:800}.mode.active{color:var(--teal)}
-#shot,#record,#stop{position:absolute;z-index:20;left:50%;top:50%;transform:translate(-50%,-50%);width:70px;height:70px;border-radius:50%;border:5px solid #fff;box-shadow:0 0 0 2px rgba(255,255,255,.7)}
+/* =========================================================
+   BLOCO INFERIOR DE CONTROLES
+   height maior = ocupa mais espaço para cima.
+   bottom maior = sobe todo o bloco.
+   ========================================================= */
+#controls{
+  position:absolute;
+  z-index:11;
+  left:0;
+  right:0;
+  bottom:max(4px,env(safe-area-inset-bottom)); /* MUDE AQUI para subir o bloco */
+  height:31%; /* MUDE AQUI a altura total dos controles */
+}
+/* =========================================================
+   SELETOR DE ÁREA: GERAL / OPERAÇÃO / MANUTENÇÃO / AUTOMAÇÃO
+   POSIÇÃO:
+   - bottom maior = sobe
+   - bottom menor = desce
+   - left/right = largura nas laterais
+   - height = altura da caixa
+   ========================================================= */
+#areas{
+  position:absolute;
+  left:4%;   /* MUDE AQUI a margem esquerda */
+  right:4%;  /* MUDE AQUI a margem direita */
+  bottom:0;  /* MUDE AQUI para subir/descer o seletor de área */
+  height:58px; /* MUDE AQUI a altura */
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  padding:0;
+  border:1px solid rgba(197,185,172,.35);
+  border-radius:16px;
+  overflow:hidden;
+  background:rgba(20,24,26,.72);
+  backdrop-filter:blur(5px);
+}
+.areaBtn{border:0;border-right:1px solid rgba(197,185,172,.18);background:transparent;color:var(--gray);font-weight:800;font-size:clamp(8px,2.2vw,11px);padding:5px 2px}.areaBtn:last-child{border-right:0}.areaBtn .aico{display:block;font-size:19px;margin-bottom:3px}
+.areaBtn.active{color:var(--teal);background:rgba(67,128,122,.12)}
+/* =========================================================
+   LINHA DO BOTÃO DE DISPARO + FILTROS + FOTO/VÍDEO
+   bottom controla a distância acima do seletor de área.
+   ========================================================= */
+#bottomRow{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:74px; /* MUDE AQUI para subir/descer o disparador e filtros */
+  height:82px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+/* POSIÇÃO DOS TEXTOS FOTO / VÍDEO */
+#modes{
+  position:absolute;
+  left:4%;      /* MUDE AQUI para mover para direita/esquerda */
+  bottom:17px;  /* MUDE AQUI para subir/descer */
+  font-size:11px;
+}.mode{margin:0 5px;color:var(--gray);font-weight:800}.mode.active{color:var(--teal)}
+/* =========================================================
+   BOTÃO CENTRAL DE FOTO / VÍDEO
+   - left: 50% = centro horizontal
+   - top: 50% = centro vertical dentro de #bottomRow
+   - width/height = tamanho
+   ========================================================= */
+#shot,#record,#stop{
+  position:absolute;
+  z-index:20;
+  left:50%; /* MUDE AQUI para mover horizontalmente */
+  top:50%;  /* MUDE AQUI para mover verticalmente */
+  transform:translate(-50%,-50%);
+  width:70px;  /* tamanho do botão */
+  height:70px; /* tamanho do botão */
+  border-radius:50%;
+  border:5px solid #fff;
+  box-shadow:0 0 0 2px rgba(255,255,255,.7);
+}
 #shot{background:#fff}#record{display:none;background:var(--rust)}#stop{display:none;background:var(--rust);color:#fff;font-size:22px}
-#effects{position:absolute;right:2%;left:auto;width:38%;bottom:9px;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none}#effects::-webkit-scrollbar{display:none}
+/* =========================================================
+   FILTROS: NATURAL / VIVO / FRIO / QUENTE / P&B
+   - right controla posição horizontal
+   - width controla largura da faixa
+   - bottom controla altura
+   ========================================================= */
+#effects{
+  position:absolute;
+  right:2%; /* MUDE AQUI para mover filtros para esquerda/direita */
+  left:auto;
+  width:39%; /* MUDE AQUI a largura dos filtros */
+  bottom:7px; /* MUDE AQUI para subir/descer */
+  display:flex;
+  gap:5px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}#effects::-webkit-scrollbar{display:none}
 .effect{flex:0 0 49px;height:59px;border:2px solid transparent;border-radius:12px;padding:36px 2px 2px;background:linear-gradient(135deg,var(--steel),var(--teal));color:#fff;font-size:8px}
 .effect:nth-child(2){background:linear-gradient(135deg,var(--teal),var(--sand))}.effect:nth-child(3){background:linear-gradient(135deg,var(--steel),var(--gray))}
 .effect:nth-child(4){background:linear-gradient(135deg,var(--rust),var(--sand))}.effect:nth-child(5){background:linear-gradient(135deg,#333,#aaa)}
@@ -49,6 +219,10 @@
 <div id="app">
   <video id="video" autoplay muted playsinline></video>
   <div id="overlay">
+    <!-- ======================================================
+     CABEÇALHO VISUAL
+     Troque textos e logo aqui.
+     ====================================================== -->
     <div id="header">
       <img id="logo" src="logo-hydro.png" alt="Hydro">
       <div id="brandText">
@@ -56,28 +230,27 @@
         <div id="dept">GERÊNCIA DE ENERGIA<br>E AUTOMAÇÃO</div>
       </div>
     </div>
+    <!-- Nome da área e frase inferior -->
     <div id="areaTitle">CONECTA<span id="tagline">Na Alunorte nós inovamos</span></div>
     <span class="themeIcon i1"></span><span class="themeIcon i2"></span><span class="themeIcon i3"></span><span class="themeIcon i4"></span>
     <span class="themeIcon i5"></span><span class="themeIcon i6"></span><span class="themeIcon i7"></span><span class="themeIcon i8"></span>
   </div>
 
+  <!-- Botões de trocar câmera e flash -->
   <div id="topTools">
-    <button class="tool" id="flip">⚙️</button>
+    <button class="tool" id="flip" title="Trocar câmera">🔄📷</button>
     <button class="tool" id="flash">⚡</button>
   </div>
 
+  <!-- ======================================================
+     CONTROLES INFERIORES
+     ====================================================== -->
   <div id="controls">
     <div id="areas">
-      <button class="areaBtn active" data-area="geral">GERAL</button>
-      <button class="areaBtn" data-area="operacao">OPERAÇÃO</button>
-      <button class="areaBtn" data-area="manutencao">MANUTENÇÃO</button>
-      <button class="areaBtn" data-area="automacao">AUTOMAÇÃO</button>
-    </div>
-
-    <div id="formatBar">
-      <button class="formatBtn active" data-ratio="9:16"><b>9:16</b>STORY</button>
-      <button class="formatBtn" data-ratio="4:5"><b>4:5</b>POST</button>
-      <button class="formatBtn" data-ratio="1:1"><b>1:1</b>QUADRADO</button>
+      <button class="areaBtn active" data-area="geral"><span class="aico">🏠</span>GERAL</button>
+      <button class="areaBtn" data-area="operacao"><span class="aico">🖥️</span>OPERAÇÃO</button>
+      <button class="areaBtn" data-area="manutencao"><span class="aico">🔧</span>MANUTENÇÃO</button>
+      <button class="areaBtn" data-area="automacao"><span class="aico">🤖</span>AUTOMAÇÃO</button>
     </div>
 
     <div id="bottomRow">
@@ -105,17 +278,47 @@ const video=$('#video'),flashBtn=$('#flash'),flipBtn=$('#flip'),shot=$('#shot'),
 const canvas=$('#canvas'),recCanvas=$('#recCanvas'),preview=$('#preview'),previewImg=$('#previewImg'),flashScreen=$('#flashScreen');
 const areaTitle=$('#areaTitle'),photoMode=$('#photoMode'),videoMode=$('#videoMode'),logoImg=new Image();logoImg.src='logo-hydro.png';
 
-let stream=null,front=true,flashArmed=false,area='geral',effect='natural',ratio='9:16',recording=false,mediaRecorder=null,chunks=[];
+let stream=null,front=true,flashArmed=false,area='geral',effect='natural',recording=false,mediaRecorder=null,chunks=[];
 
-const labels={geral:'CONECTA',operacao:'OPERAÇÃO DO SISTEMA ELÉTRICO',manutencao:'MANUTENÇÃO DO SISTEMA ELÉTRICO',automacao:'AUTOMAÇÃO'};
-const colors={geral:'#43807A',operacao:'#43807A',manutencao:'#B95946',automacao:'#4A3041'};
+/* =========================================================
+   TEXTOS DAS ÁREAS
+   MUDE AQUI os nomes que aparecem na tela e na foto salva.
+   ========================================================= */
+const labels={
+  geral:'CONECTA',
+  operacao:'OPERAÇÃO DO SISTEMA ELÉTRICO',
+  manutencao:'MANUTENÇÃO DO SISTEMA ELÉTRICO',
+  automacao:'AUTOMAÇÃO'
+};
+/* CORES DO TÍTULO DE CADA ÁREA */
+const colors={
+  geral:'#43807A',
+  operacao:'#43807A',
+  manutencao:'#B95946',
+  automacao:'#4A3041'
+};
+/* =========================================================
+   EMOJIS DE CADA ÁREA
+   São 8 emojis por área.
+   A ordem corresponde às classes .i1 até .i8 no CSS.
+   ========================================================= */
 const themes={
   geral:['⚡','🖥️','🔧','⚙️','🤖','💻','📡','🛠️'],
   operacao:['⚡','🖥️','📊','🎛️','📟','🔌','🛰️','🛡️'],
   manutencao:['🔧','🛠️','⚙️','🧰','🔩','🪛','📏','🔌'],
   automacao:['🤖','🦾','💻','⌨️','📡','⚙️','🧠','💾']
 };
-const filters={natural:'none',vivo:'saturate(1.35) contrast(1.08)',frio:'saturate(.9) hue-rotate(12deg)',quente:'sepia(.2) saturate(1.18)',pb:'grayscale(1) contrast(1.12)'};
+/* =========================================================
+   EFEITOS DE IMAGEM
+   Ajuste os valores abaixo se quiser mudar a aparência dos filtros.
+   ========================================================= */
+const filters={
+  natural:'none',
+  vivo:'saturate(1.35) contrast(1.08)',
+  frio:'saturate(.9) hue-rotate(12deg)',
+  quente:'sepia(.2) saturate(1.18)',
+  pb:'grayscale(1) contrast(1.12)'
+};
 
 function refreshTheme(){
   areaTitle.firstChild.nodeValue=labels[area];
@@ -140,13 +343,15 @@ document.querySelectorAll('.areaBtn').forEach(b=>b.onclick=()=>{
 document.querySelectorAll('.effect').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.effect').forEach(x=>x.classList.remove('active'));b.classList.add('active');effect=b.dataset.fx;video.style.filter=filters[effect]
 });
-document.querySelectorAll('.formatBtn').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('.formatBtn').forEach(x=>x.classList.remove('active'));b.classList.add('active');ratio=b.dataset.ratio
-});
 photoMode.onclick=()=>{photoMode.classList.add('active');videoMode.classList.remove('active');shot.style.display='block';recordBtn.style.display='none';stopBtn.style.display='none'};
 videoMode.onclick=()=>{videoMode.classList.add('active');photoMode.classList.remove('active');shot.style.display='none';recordBtn.style.display='block'};
 
-function outSize(){return ratio==='9:16'?{w:1080,h:1920}:ratio==='4:5'?{w:1080,h:1350}:{w:1080,h:1080}}
+/* TAMANHO FIXO DA FOTO SALVA: 9:16
+   1080 x 1920 = padrão Story.
+   Se um dia quiser alterar a resolução, mude aqui. */
+function outSize(){
+  return {w:1080,h:1920};
+}
 function cover(sw,sh,w,h){let sr=sw/sh,br=w/h;if(sr>br){let cw=sh*br;return{sx:(sw-cw)/2,sy:0,sw:cw,sh}}else{let ch=sw/br;return{sx:0,sy:(sh-ch)/2,sw,sh:ch}}}
 function draw(ctx,w,h){
   let d=cover(video.videoWidth,video.videoHeight,w,h);ctx.save();ctx.filter=filters[effect];
@@ -161,10 +366,31 @@ function draw(ctx,w,h){
   ctx.textAlign='left';ctx.fillStyle='#fff';ctx.font=`900 ${w*.05}px Arial`;ctx.fillText('CONECTA',w*.52,h*.06);ctx.fillStyle='#43807A';ctx.fillText('2026',w*.52,h*.105);
   ctx.fillStyle='#fff';ctx.font=`700 ${w*.018}px Arial`;ctx.fillText('GERÊNCIA DE ENERGIA',w*.52,h*.135);ctx.fillText('E AUTOMAÇÃO',w*.52,h*.16);
 
-  ctx.textAlign='center';ctx.fillStyle=colors[area];ctx.font=`800 ${w*.055}px Arial`;ctx.fillText(labels[area],w/2,h*.805);
-  ctx.fillStyle='#C5B9AC';ctx.font=`500 ${w*.028}px Arial`;ctx.fillText('Na Alunorte nós inovamos',w/2,h*.845);
+  /* =========================================================
+     POSIÇÃO DOS TEXTOS NA FOTO SALVA
+     IMPORTANTE: isso controla a posição NO ARQUIVO GERADO,
+     não apenas na tela.
 
-  ctx.font=`${w*.035}px Arial`;let ys=[h*.22,h*.38,h*.54,h*.66];
+     h*.84  -> nome da área
+     h*.895 -> frase "Na Alunorte nós inovamos"
+
+     Aumentar 0.84 para 0.88 = desce.
+     Diminuir 0.84 para 0.80 = sobe.
+     ========================================================= */
+  ctx.textAlign='center';
+  ctx.fillStyle=colors[area];
+  ctx.font=`800 ${w*.055}px Arial`; /* tamanho do nome da área */
+  ctx.fillText(labels[area],w/2,h*.84); /* POSIÇÃO VERTICAL DO NOME DA ÁREA */
+
+  ctx.fillStyle='#C5B9AC';
+  ctx.font=`500 ${w*.028}px Arial`; /* tamanho da frase */
+  ctx.fillText('Na Alunorte nós inovamos',w/2,h*.895); /* POSIÇÃO VERTICAL DA FRASE */
+
+  /* POSIÇÃO DOS EMOJIS NA FOTO SALVA.
+     Cada número representa uma altura.
+     Aumentar = desce. Diminuir = sobe. */
+  ctx.font=`${w*.035}px Arial`; /* tamanho dos emojis na foto salva */
+  let ys=[h*.22,h*.38,h*.54,h*.66];
   themes[area].slice(0,4).forEach((ic,i)=>ctx.fillText(ic,w*.07,ys[i]));
   themes[area].slice(4).forEach((ic,i)=>ctx.fillText(ic,w*.93,ys[i]));
 }
@@ -176,7 +402,7 @@ shot.onclick=async()=>{
   previewImg.src=canvas.toDataURL('image/png');preview.style.display='flex'
 };
 $('#close').onclick=()=>preview.style.display='none';
-$('#save').onclick=()=>{if(!previewImg.src)return;let a=document.createElement('a');a.href=previewImg.src;a.download=`conecta-2026-${area}-${ratio.replace(':','x')}.png`;document.body.appendChild(a);a.click();a.remove()};
+$('#save').onclick=()=>{if(!previewImg.src)return;let a=document.createElement('a');a.href=previewImg.src;a.download=`conecta-2026-${area}-9x16.png`;document.body.appendChild(a);a.click();a.remove()};
 
 recordBtn.onclick=()=>{
   if(!recCanvas.captureStream||!window.MediaRecorder)return alert('Vídeo não suportado neste navegador.');
