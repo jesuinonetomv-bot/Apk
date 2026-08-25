@@ -285,7 +285,7 @@ let stream=null,front=true,flashArmed=false,area='geral',effect='natural',record
    MUDE AQUI os nomes que aparecem na tela e na foto salva.
    ========================================================= */
 const labels={
-  geral:'CONECTA',
+  geral:'GS ENERGIA E AUTOMAÇÃO',
   operacao:'OPERAÇÃO DO SISTEMA ELÉTRICO',
   manutencao:'MANUTENÇÃO DO SISTEMA ELÉTRICO',
   automacao:'AUTOMAÇÃO'
@@ -383,7 +383,7 @@ function draw(ctx,w,h){
   ctx.fillText(labels[area],w/2,h*.84); /* POSIÇÃO VERTICAL DO NOME DA ÁREA */
 
   ctx.fillStyle='#C5B9AC';
-  ctx.font=`500 ${w*.028}px Arial`; /* tamanho da frase */
+  ctx.font=`800 ${w*.028}px Arial`; /* tamanho da frase */
   ctx.fillText('Na Alunorte nós inovamos',w/2,h*.895); /* POSIÇÃO VERTICAL DA FRASE */
 
   /* POSIÇÃO DOS EMOJIS NA FOTO SALVA.
